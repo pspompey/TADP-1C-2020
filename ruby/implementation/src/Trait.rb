@@ -7,7 +7,7 @@ class Trait
 
   def initialize
     @methods = Hash.new
-    @conflict_resolution = ConflictType::DEFAULT
+    @conflict_resolution = ConflictResolution.new(ConflictType::DEFAULT, nil)
   end
 
   def method(name, &block)
