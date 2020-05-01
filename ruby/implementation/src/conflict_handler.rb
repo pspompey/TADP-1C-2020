@@ -7,10 +7,19 @@ module ConflictHandler
     when ConflictType::EXEC_ALL
       exec_all_resolution(current_method, key, other_trait)
     when ConflictType::FOLD
+      if (other_trait.conflict_resolution.functions.nil?)
+        raise StandardError, "Número de parámetros incorrectos"
+      end
       fold_resolution(current_method, key, other_trait)
     when ConflictType::EXEC_IF
+      if (other_trait.conflict_resolution.functions.nil?)
+        raise StandardError, "Número de parámetros incorrectos"
+      end
       exec_if_resolution(current_method, key, other_trait)
     when ConflictType::CUSTOM
+      if (other_trait.conflict_resolution.functions.nil?)
+        raise StandardError, "Número de parámetros incorrectos"
+      end
       #TODO custom resolution
     else
       raise StandardError, "Tipo de resolución inexistente"
@@ -72,7 +81,7 @@ class ConflictResolution
 
   attr_accessor  :conflict_type, :functions
 
-  def initialize(conflictType, functions_resolution)
+  def initialize(conflictType, functions_resolution = nil)
     @conflict_type = conflictType
     @functions = functions_resolution
   end

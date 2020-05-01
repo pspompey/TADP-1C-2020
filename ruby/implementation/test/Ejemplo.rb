@@ -32,9 +32,9 @@ end
 
 class Conflicto
   uses MiTrait + (MiOtroTrait <= ConflictResolution.new(ConflictType::EXEC_IF,
-                                                        [lambda {|un_numero| un_numero > 1000},
-                                                         lambda {|un_numero| un_numero + 3}])) +
-           (MiOtroTrait2 <= ConflictResolution.new(ConflictType::FOLD, [lambda {|un_numero, otro_numero| un_numero + otro_numero}]))
+                                                        [Proc.new {|un_numero| un_numero > 1000},
+                                                         Proc.new  {|un_numero| un_numero + 3}])) +
+           (MiOtroTrait2 <= ConflictResolution.new(ConflictType::FOLD, [Proc.new  {|un_numero, otro_numero| un_numero + otro_numero}]))
 end
 
 o = Conflicto.new
