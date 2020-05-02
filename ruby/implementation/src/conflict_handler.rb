@@ -7,19 +7,10 @@ module ConflictHandler
     when ConflictType::EXEC_ALL
       exec_all_resolution(current_method, key, other_trait)
     when ConflictType::FOLD
-      if (other_trait.conflict_resolution.functions.nil?)
-        raise StandardError, "Número de parámetros incorrectos"
-      end
       fold_resolution(current_method, key, other_trait)
     when ConflictType::EXEC_IF
-      if (other_trait.conflict_resolution.functions.nil?)
-        raise StandardError, "Número de parámetros incorrectos"
-      end
       exec_if_resolution(current_method, key, other_trait)
     when ConflictType::CUSTOM
-      if (other_trait.conflict_resolution.functions.nil?)
-        raise StandardError, "Número de parámetros incorrectos"
-      end
       #TODO custom resolution
     else
       raise StandardError, "Tipo de resolución inexistente"
@@ -29,7 +20,7 @@ module ConflictHandler
   private
 
   def exec_if_resolution(current_method, key, other_trait)
-    function = other_trait.conflict_resolution.functions[0]
+    function = other_trait.conflict_resolution.functions.fetch(0) {raise StandardError, "Número de parámetros incorrectos"}
     lambda do |*args|
       res1 = current_method.call(*args)
       res2 = other_trait.methods[key].call(*args)
@@ -39,14 +30,14 @@ module ConflictHandler
       elsif (function.call(res2))
         res2
       else
-        function_optional = other_trait.conflict_resolution.functions[1]
+        function_optional = other_trait.conflict_resolution.functions.fetch(1) {raise StandardError, "No definió una función opcional"}
         function_optional.call(*args)
       end
     end
   end
 
   def fold_resolution(current_method, key, other_trait)
-    function = other_trait.conflict_resolution.functions[0]
+    function = other_trait.conflict_resolution.functions.fetch(0) {raise StandardError, "Número de parámetros incorrectos"}
     lambda do |*args|
       res1 = current_method.call(*args)
       res2 = other_trait.methods[key].call(*args)
@@ -81,7 +72,7 @@ class ConflictResolution
 
   attr_accessor  :conflict_type, :functions
 
-  def initialize(conflictType, functions_resolution = nil)
+  def initialize(conflictType, functions_resolution = {})
     @conflict_type = conflictType
     @functions = functions_resolution
   end
