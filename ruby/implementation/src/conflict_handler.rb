@@ -11,13 +11,23 @@ module ConflictHandler
     when ConflictType::EXEC_IF
       exec_if_resolution(current_method, key, other_trait)
     when ConflictType::CUSTOM
-      #TODO custom resolution
+      custom_resolution(other_trait)
     else
       raise StandardError, "Tipo de resolución inexistente"
     end
   end
 
   private
+
+  def custom_resolution(other_trait)
+    Proc.new do |*args|
+      @results = []
+      other_trait.conflict_resolution.functions.each do |function|
+        @results << function.call(*args)
+      end
+      @results.each { |_, result| result }
+    end
+  end
 
   def exec_if_resolution(current_method, key, other_trait)
     function = other_trait.conflict_resolution.functions.fetch(0) {raise StandardError, "Número de parámetros incorrectos"}
