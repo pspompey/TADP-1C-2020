@@ -21,7 +21,7 @@ end
 
 class ConflictoCustom
   uses MiTrait + (MiOtroTrait <= ConflictResolution.custom(
-      function: proc { 
+      function: proc {
         "hola"
       }
   ))

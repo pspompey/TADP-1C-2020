@@ -1,17 +1,17 @@
 module ConflictHandler
 
-  def conflict(key, other_trait, current_method)
-    case other_trait.conflict_resolution.conflict_type
+  def conflict(name_method, conflict_resolution, current_method, other_trait_method)
+    case conflict_resolution.conflict_type
     when ConflictType::DEFAULT
-        raise DuplicateMethodError, "Conflicto con el metodo #{key}"
+        raise DuplicateMethodError, "Conflicto con el metodo #{name_method}"
     when ConflictType::EXEC_ALL
-      exec_all_resolution(current_method, key, other_trait)
+      exec_all_resolution(current_method, other_trait_method)
     when ConflictType::FOLD
-      fold_resolution(current_method, key, other_trait)
+      fold_resolution(current_method, other_trait_method, conflict_resolution.functions)
     when ConflictType::EXEC_IF
-      exec_if_resolution(current_method, key, other_trait)
+      exec_if_resolution(current_method, other_trait_method, conflict_resolution.functions)
     when ConflictType::CUSTOM
-      custom_resolution(current_method, key, other_trait)
+      custom_resolution(current_method, other_trait_method, conflict_resolution.functions)
     else
       raise StandardError, "Tipo de resolución inexistente"
     end
@@ -19,39 +19,36 @@ module ConflictHandler
 
   private
 
-  def custom_resolution(current_method, key, other_trait)
+  def custom_resolution(current_method, other_trait_method, other_trait_functions)
     proc do |*args|
-    other_trait.conflict_resolution.functions.fetch(0).call(other_trait.methods[key].call(*args),
+      other_trait_functions.fetch(0).call(other_trait_method.call(*args),
                                                             current_method.call(*args), *args)
     end
   end
 
-  def exec_if_resolution(current_method, key, other_trait)
-    function = other_trait.conflict_resolution.functions.fetch(0)
+  def exec_if_resolution(current_method, other_trait_method, other_trait_functions)
     lambda do |*args|
-      if (function.call(current_method.call(*args)))
+      if (other_trait_functions.fetch(0).call(current_method.call(*args)))
         current_method.call(*args)
-      elsif (function.call(other_trait.methods[key].call(*args)))
-        other_trait.methods[key].call(*args)
+      elsif (other_trait_functions.fetch(0).call(other_trait_method.call(*args)))
+        other_trait_method.call(*args)
       else
-        function_optional = other_trait.conflict_resolution.functions.fetch(1)
-        function_optional.call(*args)
+        other_trait_functions.fetch(1).call(*args)
       end
     end
   end
 
-  def fold_resolution(current_method, key, other_trait)
-    function = other_trait.conflict_resolution.functions.fetch(0)
+  def fold_resolution(current_method, other_trait_method, other_trait_functions)
     lambda do |*args|
-      function.call(current_method.call(*args), other_trait.methods[key].call(*args))
+      other_trait_functions.fetch(0).call(current_method.call(*args), other_trait_method.call(*args))
     end
   end
 
-  def exec_all_resolution(current_method, key, other_trait)
+  def exec_all_resolution(current_method, other_trait_method)
     Proc.new do |*args|
       @results = []
       @results << current_method.call(*args)
-      @results << other_trait.methods[key].call(*args)
+      @results << other_trait_method.call(*args)
       @results.each { |_, result| result }
     end
   end

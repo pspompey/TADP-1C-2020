@@ -40,7 +40,8 @@ class Trait
   def methods_merge(otherTrait)
     self.methods.merge!(otherTrait.methods)do
     |key|
-        conflict(key, otherTrait, self.methods[key])
+        conflict(key, otherTrait.conflict_resolution,
+                 self.methods[key], otherTrait.methods[key])
      end
   end
 
