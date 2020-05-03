@@ -11,7 +11,7 @@ module ConflictHandler
     when ConflictType::EXEC_IF
       exec_if_resolution(current_method, key, other_trait)
     when ConflictType::CUSTOM
-      custom_resolution(other_trait)
+      custom_resolution(current_method, key, other_trait)
     else
       raise StandardError, "Tipo de resolución inexistente"
     end
@@ -19,13 +19,11 @@ module ConflictHandler
 
   private
 
-  def custom_resolution(other_trait)
-    Proc.new do |*args|
-      @results = []
-      other_trait.conflict_resolution.functions.each do |function|
-        @results << function.call(*args)
-      end
-      @results.each { |_, result| result }
+  def custom_resolution(current_method, key, other_trait)
+    proc do |*args|
+    res1 = current_method.call(*args)
+    res2 = other_trait.methods[key].call(*args)
+    other_trait.conflict_resolution.functions.call(res2, res1, *args)
     end
   end
 
@@ -59,8 +57,8 @@ module ConflictHandler
   def exec_all_resolution(current_method, key, other_trait)
     Proc.new do |*args|
       @results = []
-      @results[0] = current_method.call(*args)
-      @results[1] = other_trait.methods[key].call(*args)
+      @results << current_method.call(*args)
+      @results << other_trait.methods[key].call(*args)
       @results.each { |_, result| result }
     end
   end
