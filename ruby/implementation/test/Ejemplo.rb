@@ -2,6 +2,7 @@ require '../src/Trait'
 require '../src/Class'
 require '../src/Symbol'
 require '../src/conflict_handler'
+require '../src/conflict_resolution'
 
 Trait.define do
   name :MiTrait
@@ -31,13 +32,13 @@ Trait.define do
 end
 
 class Conflicto
-  uses MiTrait + (MiOtroTrait <= ConflictResolution.new(ConflictType::EXEC_IF,
-                                                        [Proc.new {|un_numero| un_numero > 1000},
-                                                         Proc.new  {|un_numero| un_numero + 3}])) +
-           (MiOtroTrait2 <= ConflictResolution.new(ConflictType::FOLD, [Proc.new  {|un_numero, otro_numero| un_numero + otro_numero}]))
+
+
+  uses MiTrait  +
+           (MiOtroTrait2 <= ConflictResolution.custom(
+               function: proc  {"hola"}))
 end
 
 o = Conflicto.new
 puts o.metodo1
 puts o.metodo2(84)
-puts o.metodo3
