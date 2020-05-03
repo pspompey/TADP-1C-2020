@@ -21,8 +21,8 @@ module ConflictHandler
 
   def custom_resolution(current_method, key, other_trait)
     proc do |*args|
-    other_trait.conflict_resolution.functions.fetch(0).call(current_method.call(*args),
-                                                            other_trait.methods[key].call(*args), *args)
+    other_trait.conflict_resolution.functions.fetch(0).call(other_trait.methods[key].call(*args),
+                                                            current_method.call(*args), *args)
     end
   end
 

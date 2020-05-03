@@ -3,7 +3,7 @@ require '../src/conflict_handler'
 class Trait
   include ConflictHandler
 
-  attr_accessor :methods, :traits, :conflict_resolution
+  attr_accessor :methods, :conflict_resolution
 
   def initialize
     @methods = Hash.new
@@ -24,9 +24,17 @@ class Trait
     Object.const_set(name, self)
   end
 
+  def clone
+    object_clon = Trait.new
+    object_clon.methods = self.methods.clone
+    object_clon.conflict_resolution = self.conflict_resolution.clone
+    object_clon
+  end
+
   def +(otherTrait)
-    self.methods_merge(otherTrait)
-    self
+    trait = self.clone
+    trait.methods_merge(otherTrait)
+    trait
   end
 
   def methods_merge(otherTrait)
@@ -37,22 +45,25 @@ class Trait
   end
 
   def - (method)
-    if(self.methods.has_key?(method))
-      self.methods.delete(method)
+    trait = self.clone
+    if(trait.methods.has_key?(method))
+      trait.methods.delete(method)
     else
       raise StandardError, "No existe el metodo #{method} a remover"
     end
-    self
+    trait
   end
 
   def << (tuple_method)
-    self.methods[tuple_method.flatten.at(1)] = self.methods.delete tuple_method.flatten.at(0)
-    self
+    trait = self.clone
+    trait.methods[tuple_method.flatten.at(1)] = trait.methods.delete tuple_method.flatten.at(0)
+    trait
   end
 
   def <= (conflict_resolution)
-    self.conflict_resolution = conflict_resolution
-    self
+    trait = self.clone
+    trait.conflict_resolution = conflict_resolution
+    trait
   end
 
 end
