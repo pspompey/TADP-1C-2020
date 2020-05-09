@@ -1,6 +1,6 @@
 require 'rspec'
 require_relative '../src/Class'
-require_relative '../src/trait_old'
+require_relative '../src/Trait'
 
 describe 'Resolucion de conflictos' do
   it ('En caso de conflicto que ejecute todos los mensajes conflictivos en orden de aparición.') do
