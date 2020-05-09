@@ -1,70 +1,70 @@
-require '../src/conflict_handler'
+require_relative 'Estrategia.rb'
 
 class Trait
-  include ConflictHandler
+  attr_reader :trait_methods
 
-  attr_accessor :methods, :conflict_resolution
+  include Estrategia
 
-  def initialize
-    @methods = Hash.new
-    @conflict_resolution = ConflictResolution.new(ConflictType::DEFAULT)
+  def initialize(&bloque)
+    @trait_methods = {}
+    instance_eval(&bloque)
   end
 
-  def method(name, &block)
-    @methods[name] = block
+  def name(nombre_Trait)
+    Object.const_set(nombre_Trait, self)
   end
 
-  def self.define &definition_trait
-    @trait = Trait.new
-    @trait.instance_eval(&definition_trait)
-    @trait
+  def method(nombre, &cuerpo_metodo)
+    @trait_methods.update({nombre => cuerpo_metodo})
   end
 
-  def name name
-    Object.const_set(name, self)
+  def self.define(&bloque)
+    Trait.new(&bloque)
   end
 
-  def clone
-    object_clon = Trait.new
-    object_clon.methods = self.methods.clone
-    object_clon.conflict_resolution = self.conflict_resolution.clone
-    object_clon
-  end
-
-  def +(otherTrait)
-    trait = self.clone
-    trait.methods_merge(otherTrait)
-    trait
-  end
-
-  def methods_merge(otherTrait)
-    self.methods.merge!(otherTrait.methods)do
-    |key|
-        conflict(key, otherTrait.conflict_resolution,
-                 self.methods[key], otherTrait.methods[key])
-     end
-  end
-
-  def - (method)
-    trait = self.clone
-    if(trait.methods.has_key?(method))
-      trait.methods.delete(method)
-    else
-      raise StandardError, "No existe el metodo #{method} a remover"
+  def generar_trait_con_metodos(metodos)
+    return Trait.new do
+      @trait_methods.update(metodos)
     end
-    trait
   end
 
-  def << (tuple_method)
-    trait = self.clone
-    trait.methods[tuple_method.flatten.at(1)] = trait.methods.delete tuple_method.flatten.at(0)
-    trait
+  def <<(simbolos_metodos)
+    metodos_trait_con_alias = @trait_methods.clone
+    metodos_trait_con_alias[simbolos_metodos[1]] = metodos_trait_con_alias.delete(simbolos_metodos[0])
+
+    generar_trait_con_metodos(metodos_trait_con_alias)
   end
 
-  def <= (conflict_resolution)
-    trait = self.clone
-    trait.conflict_resolution = conflict_resolution
-    trait
+  def +(otro_trait, estrategia = "resolucion_basica")
+
+    # ESTRATEGIA ES UN MIXIN
+
+    metodos_para_agregar = send estrategia,self,otro_trait
+
+    # CADA ESTRATEGIA ES UN MODULE
+    # metodos_para_agregar = estrategia.resolver_conflicto(self, otro_trait)
+
+    # SIN ESTRATEGIAS
+    # metodos_para_agregar = @trait_methods.merge(otro_trait.trait_methods) { |nombre_metodo| estrategia }
+
+
+    generar_trait_con_metodos(metodos_para_agregar)
   end
+
+  def -(metodo)
+    metodos_de_trait = @trait_methods.filter { |nombre_metodo| nombre_metodo != metodo }
+    generar_trait_con_metodos(metodos_de_trait)
+  end
+
 
 end
+
+
+class MetodosDeIgualNombreException < StandardError
+end
+
+
+
+# TODO: Entonces si se suman el trait T1 y el trait T2 y ambos tienen un mensaje m entonces en la clase se deberá generar un mensaje m que
+# TODO: llame a t1 m y luego a t2 m, siendo estos alias a los respectivos traits.
+
