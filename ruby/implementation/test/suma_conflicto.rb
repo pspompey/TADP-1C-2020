@@ -3,7 +3,6 @@ require '../src/Trait'
 require '../src/Class'
 require '../src/Symbol'
 require '../src/conflict_handler'
-require '../src/conflict_resolution'
 
 Trait.define do
   name :MiTrait
@@ -20,6 +19,11 @@ Trait.define do
   method :metodo1 do
     "kawuabonga"
   end
+
+  method :metodo2 do |un_numero|
+    un_numero
+  end
+
   method :metodo3 do
     "zaraza"
   end
@@ -36,7 +40,7 @@ test_suite do
           uses MiTrait + MiOtroTrait
         end
       rescue DuplicateMethodError => error
-        conflicto_metodo_raise_error = error.message == "Conflicto con el metodo metodo1"
+        conflicto_metodo_raise_error = error.message == "Conflicto con el metodo metodo2"
       end
       end
     end

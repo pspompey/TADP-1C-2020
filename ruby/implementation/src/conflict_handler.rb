@@ -1,3 +1,5 @@
+require '../src/conflict_resolution'
+
 module ConflictHandler
 
   def conflict(name_method, conflict_resolution, current_method, other_trait_method)
@@ -21,8 +23,7 @@ module ConflictHandler
 
   def custom_resolution(current_method, other_trait_method, other_trait_functions)
     proc do |*args|
-      other_trait_functions.fetch(0).call(other_trait_method.call(*args),
-                                                            current_method.call(*args), *args)
+      other_trait_functions.fetch(0).call(current_method, other_trait_method, *args)
     end
   end
 

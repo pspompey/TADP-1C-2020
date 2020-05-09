@@ -3,7 +3,6 @@ require '../src/Trait'
 require '../src/Class'
 require '../src/Symbol'
 require '../src/conflict_handler'
-require '../src/conflict_resolution'
 
 Trait.define do
   name :MiTrait
@@ -29,35 +28,35 @@ end
 
 class ConflictoCustomCurrentResult
   uses MiTrait + (MiOtroTrait <= ConflictResolution.custom(
-      function: proc { |result|
-        result * 2
+      function: proc { |current_method, _, *args|
+        current_method.call(*args) * 2
       }
   ))
 end
 
 class ConflictoCustomResults
   uses MiTrait + (MiOtroTrait <= ConflictResolution.custom(
-      function: proc { |current_result, other_trait_result|
-        current_result * other_trait_result
+      function: proc { |current_method, other_trait_method, *args|
+        current_method.call(*args) *  other_trait_method.call(*args)
       }
   ))
 end
 
 class ConflictoCustomResultsArgs
   uses MiTrait + (MiOtroTrait <= ConflictResolution.custom(
-      function: proc { |current_result, other_trait_result, argument|
-        current_result * other_trait_result + argument
+      function: proc { |current_method, other_trait_method, args|
+        current_method.call(*args) *  other_trait_method.call(*args) + args
       }
   ))
 end
 
 class ConflictoCustomExecIf
   uses MiTrait + (MiOtroTrait <= ConflictResolution.custom(
-      function: proc { |current_result, other_trait_result|
-        if (current_result == 2)
-          current_result
-        elsif (other_trait_result == 3)
-          other_trait_result
+      function: proc { |current_method, other_trait_method, *args|
+        if (current_method.call(*args) == 2)
+          current_method.call(*args)
+        elsif (other_trait_method.call(*args) == 3)
+          other_trait_method.call(*args)
         else
           raise StandardError, "No cumple ninguna condición"
         end
