@@ -1,13 +1,12 @@
-require '../src/conflict_handler'
+require '../src/conflict_resolution'
 
 class Trait
-  include ConflictHandler
 
   attr_accessor :methods, :conflict_resolution
 
   def initialize
     @methods = Hash.new
-    @conflict_resolution = ConflictResolution.new(ConflictType::DEFAULT)
+    @conflict_resolution = ConflictResolutionDefault.new
   end
 
   def method(name, &block)
@@ -40,8 +39,7 @@ class Trait
   def methods_merge(otherTrait)
     self.methods.merge!(otherTrait.methods)do
     |key|
-        conflict(key, otherTrait.conflict_resolution,
-                 self.methods[key], otherTrait.methods[key])
+      otherTrait.conflict_resolution.solve(self.methods[key], otherTrait.methods[key], key)
      end
   end
 

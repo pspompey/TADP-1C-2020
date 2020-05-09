@@ -2,7 +2,7 @@ require '../lib/testing_framework'
 require '../src/Trait'
 require '../src/Class'
 require '../src/Symbol'
-require '../src/conflict_handler'
+require '../src/conflict_resolution'
 
 
 Trait.define do
@@ -26,7 +26,7 @@ Trait.define do
 end
 
 class ConflictoAll
-  uses MiTrait + (MiOtroTrait <= ConflictResolution.exec_all())
+  uses MiTrait + (MiOtroTrait <= ConflictResolutionExecAll.new)
 end
 
 test_suite do

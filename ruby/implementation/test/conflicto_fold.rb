@@ -2,7 +2,7 @@ require '../lib/testing_framework'
 require '../src/Trait'
 require '../src/Class'
 require '../src/Symbol'
-require '../src/conflict_handler'
+require '../src/conflict_resolution'
 
 Trait.define do
   name :MiTrait
@@ -25,7 +25,7 @@ Trait.define do
 end
 
 class ConflictoFold
-  uses MiTrait + (MiOtroTrait <= ConflictResolution.exec_fold(
+  uses MiTrait + (MiOtroTrait <= ConflictResolutionFold.new(
       function: proc  {|un_numero, otro_numero| un_numero + otro_numero}))
 end
 

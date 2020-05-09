@@ -2,7 +2,7 @@ require '../lib/testing_framework'
 require '../src/Trait'
 require '../src/Class'
 require '../src/Symbol'
-require '../src/conflict_handler'
+require '../src/conflict_resolution'
 
 Trait.define do
   name :MiTrait
@@ -19,19 +19,19 @@ Trait.define do
 end
 
 class ConflictoExecIfOption
-  uses MiTrait + (MiOtroTrait <= ConflictResolution.exec_if(
+  uses MiTrait + (MiOtroTrait <= ConflictResolutionExecIf.new(
       condition: Proc.new { |resultado| resultado > 1000 },
       option: Proc.new { |resultado| resultado + 3 }))
 end
 
 class ConflictoExecIfFirst
-  uses MiTrait + (MiOtroTrait <= ConflictResolution.exec_if(
+  uses MiTrait + (MiOtroTrait <= ConflictResolutionExecIf.new(
       condition: Proc.new { |resultado| resultado > 0 },
       option: Proc.new { |resultado| resultado + 3 }))
 end
 
 class ConflictoExecIfSecond
-  uses MiTrait + (MiOtroTrait <= ConflictResolution.exec_if(
+  uses MiTrait + (MiOtroTrait <= ConflictResolutionExecIf.new(
       condition: Proc.new { |resultado| resultado < 40 },
       option: Proc.new { |resultado| resultado + 3 }))
 end

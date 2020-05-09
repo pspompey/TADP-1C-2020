@@ -2,7 +2,7 @@ require '../lib/testing_framework'
 require '../src/Trait'
 require '../src/Class'
 require '../src/Symbol'
-require '../src/conflict_handler'
+require '../src/conflict_resolution'
 
 Trait.define do
   name :MiTrait
@@ -19,7 +19,7 @@ Trait.define do
 end
 
 class ConflictoCustom
-  uses MiTrait + (MiOtroTrait <= ConflictResolution.custom(
+  uses MiTrait + (MiOtroTrait <= ConflictResolutionCustom.new(
       function: proc {
         "hola"
       }
@@ -27,7 +27,7 @@ class ConflictoCustom
 end
 
 class ConflictoCustomCurrentResult
-  uses MiTrait + (MiOtroTrait <= ConflictResolution.custom(
+  uses MiTrait + (MiOtroTrait <= ConflictResolutionCustom.new(
       function: proc { |current_method, _, *args|
         current_method.call(*args) * 2
       }
@@ -35,7 +35,7 @@ class ConflictoCustomCurrentResult
 end
 
 class ConflictoCustomResults
-  uses MiTrait + (MiOtroTrait <= ConflictResolution.custom(
+  uses MiTrait + (MiOtroTrait <= ConflictResolutionCustom.new(
       function: proc { |current_method, other_trait_method, *args|
         current_method.call(*args) *  other_trait_method.call(*args)
       }
@@ -43,7 +43,7 @@ class ConflictoCustomResults
 end
 
 class ConflictoCustomResultsArgs
-  uses MiTrait + (MiOtroTrait <= ConflictResolution.custom(
+  uses MiTrait + (MiOtroTrait <= ConflictResolutionCustom.new(
       function: proc { |current_method, other_trait_method, args|
         current_method.call(*args) *  other_trait_method.call(*args) + args
       }
@@ -51,7 +51,7 @@ class ConflictoCustomResultsArgs
 end
 
 class ConflictoCustomExecIf
-  uses MiTrait + (MiOtroTrait <= ConflictResolution.custom(
+  uses MiTrait + (MiOtroTrait <= ConflictResolutionCustom.new(
       function: proc { |current_method, other_trait_method, *args|
         if (current_method.call(*args) == 2)
           current_method.call(*args)
