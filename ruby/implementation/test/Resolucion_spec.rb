@@ -9,6 +9,9 @@ describe 'Resolucion de conflictos' do
       method :saludo do
         puts "Hello"
       end
+      method :ignorar do
+        puts "..."
+      end
     end
 
     Trait.define do
@@ -25,5 +28,7 @@ describe 'Resolucion de conflictos' do
 
     juan = Persona.new
     expect(juan.saludo).to eq(nil)
+    juan.ignorar
+    juan.saludo
   end
 end

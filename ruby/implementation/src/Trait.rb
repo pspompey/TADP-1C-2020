@@ -38,8 +38,9 @@ class Trait
   def +(otro_trait, estrategia = "resolucion_basica")
 
     # ESTRATEGIA ES UN MIXIN
-
+    @trait_results = []
     metodos_para_agregar = send estrategia,self,otro_trait
+    puts metodos_para_agregar
 
     # CADA ESTRATEGIA ES UN MODULE
     # metodos_para_agregar = estrategia.resolver_conflicto(self, otro_trait)
