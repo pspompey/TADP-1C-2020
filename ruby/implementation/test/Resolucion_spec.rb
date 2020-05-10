@@ -7,7 +7,7 @@ describe 'Resolucion de conflictos' do
     Trait.define do
       name :Ingles
       method :saludo do
-        puts "Hello"
+        "Hello"
       end
       method :ignorar do
         puts "..."
@@ -17,7 +17,7 @@ describe 'Resolucion de conflictos' do
     Trait.define do
       name :Hawaiano
       method :saludo do
-        puts "Aloha"
+        "Aloha"
       end
     end
 
@@ -27,8 +27,7 @@ describe 'Resolucion de conflictos' do
     end
 
     juan = Persona.new
-    expect(juan.saludo).to eq(nil)
-    juan.ignorar
-    juan.saludo
+    expect(juan.saludo).to eq(["Hello", "Aloha"])
+
   end
 end
