@@ -43,4 +43,28 @@ describe 'Resolucion de conflictos' do
     expect(juan.saludo).to eq("HelloAloha")
 
   end
+
+  it ('En caso de conflicto aplicar condicion') do
+    Trait.define do
+      name :Pares
+      method :mi_numero_favorito do
+        6
+      end
+    end
+
+    Trait.define do
+      name :Impares
+      method :mi_numero_favorito do
+        11
+      end
+    end
+
+    class Persona
+      uses Pares.+(Impares, 'llamar_con_condicion', ">")
+    end
+
+    juan = Persona.new
+    expect(juan.mi_numero_favorito).to eq(11)
+
+  end
 end
