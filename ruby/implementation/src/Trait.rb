@@ -38,9 +38,9 @@ class Trait
   def +(otro_trait, estrategia = "resolucion_basica", *args)
 
     # ESTRATEGIA ES UN MIXIN
-    @trait_results = []
+
     metodos_para_agregar = send estrategia, self, otro_trait, *args
-    puts metodos_para_agregar
+
 
     generar_trait_con_metodos(metodos_para_agregar)
   end
