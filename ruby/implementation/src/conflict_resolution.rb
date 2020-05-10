@@ -1,3 +1,6 @@
+# se decidió crear una clase para cada resolución de conflicto
+# que funcione con el método solve polimórficamente
+
 class ConflictResolutionExecAll
 
   def solve(current_method, other_trait_method, _)
@@ -72,6 +75,7 @@ end
 
 class ConflictResolutionDefault
 
+  # se encierra dentro de un proc para que se ejecute cuando se invoque el método conflictivo
   def solve(_, _, method_name)
     Proc.new do
       raise DuplicateMethodError, "Conflicto con el metodo #{method_name}"

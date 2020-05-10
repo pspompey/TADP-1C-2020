@@ -23,6 +23,7 @@ class Trait
     Object.const_set(name, self)
   end
 
+  #crea un nuevo Trait clonando sus propiedades
   def clone
     object_clon = Trait.new
     object_clon.methods = self.methods.clone
@@ -30,12 +31,14 @@ class Trait
     object_clon
   end
 
+  #suma de Traits
   def +(otherTrait)
     trait = self.clone
     trait.methods_merge(otherTrait)
     trait
   end
 
+  #unión de los método al sumar Traits
   def methods_merge(otherTrait)
     self.methods.merge!(otherTrait.methods)do
     |key|
@@ -43,6 +46,7 @@ class Trait
      end
   end
 
+  #restarle un método al trait
   def - (method)
     trait = self.clone
     if(trait.methods.has_key?(method))
@@ -53,12 +57,14 @@ class Trait
     trait
   end
 
+  #renombrar un método conflictivo
   def << (tuple_method)
     trait = self.clone
     trait.methods[tuple_method.flatten.at(1)] = trait.methods.delete tuple_method.flatten.at(0)
     trait
   end
 
+  #resolución de conflictos mediante una estrategia
   def <= (conflict_resolution)
     trait = self.clone
     trait.conflict_resolution = conflict_resolution
