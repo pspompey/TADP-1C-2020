@@ -50,7 +50,7 @@ describe 'Tests de Traits' do
 
     juan = Persona.new
 
-    expect(juan.suma(3,4)).to eq(7)
+    expect(juan.suma(3, 4)).to eq(7)
 
   end
 
@@ -148,7 +148,7 @@ describe 'Tests de Traits' do
     end
 
     juan = Persona.new
-    expect{juan.saludo}.to raise_error(MetodosDeIgualNombreException)
+    expect { juan.saludo }.to raise_error(MetodosDeIgualNombreException)
   end
 
   it ('Resta selectores con una clase') do
@@ -179,6 +179,13 @@ describe 'Tests de Traits' do
     expect(juan.despedida).to eq("Ciao")
   end
 
+  it ('Resta selectores con una clase tira error si no existe el metodo') do
+    expect {
+      class Persona
+        uses Frances + (Italiano - :sumar)
+      end }.to raise_error(StandardError)
+  end
+
   it ('Renombrar selectores') do
     Trait.define do
       name :Trabajo
@@ -207,6 +214,4 @@ describe 'Tests de Traits' do
     expect(juan_con_alias.celular).to eq("2")
     expect(juan_con_alias.celular_particular).to eq("3")
   end
-
-#TODO: Para Renombrar selectores, se busca la key y se modifica su nombre
 end
