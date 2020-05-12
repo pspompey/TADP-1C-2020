@@ -29,7 +29,7 @@ Trait.define do
 end
 
 
-class ConflictoAll
+class Conflicto
   uses MiTrait + (MiOtroTrait <= {:metodo2 => ConflictResolutionExecAll.new,
                                   :metodo3 => ConflictResolutionExecIf.new(condition: Proc.new { |resultado| resultado == "Liu Kang" },
                                                                            option: Proc.new { "Finish Him!!" }
@@ -37,7 +37,7 @@ class ConflictoAll
 end
 
 test_suite do
-  o = ConflictoAll.new
+  o = Conflicto.new
 
   test do
     comprendo_metodo1 = false
