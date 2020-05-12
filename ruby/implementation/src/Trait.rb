@@ -2,11 +2,12 @@ require '../src/conflict_resolution'
 
 class Trait
 
-  attr_accessor :methods, :conflict_resolution
+  attr_accessor :methods, :conflict_resolution,:methods_resolution
 
   def initialize
     @methods = Hash.new
     @conflict_resolution = ConflictResolutionDefault.new
+    @methods_resolution = Hash.new
   end
 
   def method(name, &block)
@@ -42,7 +43,11 @@ class Trait
   def methods_merge(otherTrait)
     self.methods.merge!(otherTrait.methods)do
     |key|
-      otherTrait.conflict_resolution.solve(self.methods[key], otherTrait.methods[key], key)
+      if otherTrait.methods_resolution.has_key? key
+        otherTrait.methods_resolution[key].solve(self.methods[key], otherTrait.methods[key], key)
+      else
+        otherTrait.conflict_resolution.solve(self.methods[key], otherTrait.methods[key], key)
+      end
      end
   end
 
@@ -67,7 +72,12 @@ class Trait
   #resolución de conflictos mediante una estrategia
   def <= (conflict_resolution)
     trait = self.clone
-    trait.conflict_resolution = conflict_resolution
+    if conflict_resolution.instance_of? Hash
+      trait.methods_resolution= conflict_resolution
+    else
+      trait.conflict_resolution = conflict_resolution
+    end
+
     trait
   end
 
