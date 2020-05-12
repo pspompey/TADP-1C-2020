@@ -16,6 +16,9 @@ Trait.define do
   method :metodo3 do
     "Scorpion"
   end
+  method :metodo4 do
+    "Goku"
+  end
 end
 
 Trait.define do
@@ -25,6 +28,9 @@ Trait.define do
   end
   method :metodo3 do
     "SubZero"
+  end
+  method :metodo4 do
+    "Vegeta"
   end
 end
 
@@ -70,5 +76,23 @@ test_suite do
     test_suite.ejecutar
 
     assert comprendo_metodo3
+  end
+
+  test do
+    comprendo_metodo4 = false
+    test_suite = TestSuite.new do
+      test do
+        begin
+          o.metodo4
+          comprendo_metodo4 = false
+        rescue DuplicateMethodError
+          comprendo_metodo4 = true
+        end
+      end
+    end
+
+    test_suite.ejecutar()
+
+    assert comprendo_metodo4
   end
 end
