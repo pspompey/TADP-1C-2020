@@ -1,8 +1,8 @@
 require 'rspec'
-require '../spec/Trait'
-require '../spec/Class'
-require '../spec/Symbol'
-require '../spec/conflict_resolution'
+require_relative '../src/Trait'
+require_relative '../src/Class'
+require_relative '../src/Symbol'
+require_relative '../src/conflict_resolution'
 
 Trait.define do
   name :MiTrait
