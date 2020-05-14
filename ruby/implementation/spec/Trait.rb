@@ -1,4 +1,4 @@
-require '../src/conflict_resolution'
+require '../spec/conflict_resolution'
 
 class Trait
 

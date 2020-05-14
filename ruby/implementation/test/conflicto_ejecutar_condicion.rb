@@ -1,8 +1,8 @@
 require '../lib/testing_framework'
-require '../src/Trait'
-require '../src/Class'
-require '../src/Symbol'
-require '../src/conflict_resolution'
+require '../spec/Trait'
+require '../spec/Class'
+require '../spec/Symbol'
+require '../spec/conflict_resolution'
 
 Trait.define do
   name :MiTrait
