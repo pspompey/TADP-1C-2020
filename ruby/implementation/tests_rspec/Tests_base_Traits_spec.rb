@@ -1,9 +1,8 @@
 require 'rspec'
-require '../spec/Trait'
-require '../spec/Class'
-require '../spec/Symbol'
-require '../spec/conflict_resolution'
-
+require_relative '../src/Trait'
+require_relative '../src/Class'
+require_relative '../src/Symbol'
+require_relative '../src/conflict_resolution'
 
 describe 'Tests de Traits' do
   it('Creacion de una instancia de Trait, que posee en un diccionario los metodos definidos') do
