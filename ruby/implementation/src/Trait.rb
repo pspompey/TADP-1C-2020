@@ -1,4 +1,4 @@
-require '../spec/conflict_resolution'
+require_relative '../src/conflict_resolution'
 
 class Trait
 
