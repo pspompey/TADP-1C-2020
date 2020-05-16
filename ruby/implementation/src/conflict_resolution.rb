@@ -6,8 +6,8 @@ class ConflictResolutionExecAll
   def solve(current_method, other_trait_method, _)
     Proc.new do |*args|
       @results = []
-      @results << current_method.call(*args)
-      @results << other_trait_method.call(*args)
+      @results << instance_exec(*args, &current_method)
+      @results << instance_exec(*args, &other_trait_method)
       @results
     end
   end
@@ -21,7 +21,7 @@ class ConflictResolutionFold
   def solve(current_method, other_trait_method, _)
     func = function
     lambda do |*args|
-      func.call(current_method.call(*args), other_trait_method.call(*args))
+      instance_exec(current_method.call(*args), other_trait_method.call(*args), &func)
     end
   end
 
@@ -39,12 +39,12 @@ class ConflictResolutionExecIf
     cond = condition
     opt = option
     lambda do |*args|
-      if (cond.call(current_method.call(*args)))
-        current_method.call(*args)
-      elsif (cond.call(other_trait_method.call(*args)))
-        other_trait_method.call(*args)
+      if (instance_exec(instance_exec(*args, &current_method), &cond))
+        instance_exec(*args, &current_method)
+      elsif (instance_exec(instance_exec(*args, &other_trait_method), &cond))
+        instance_exec(*args, &other_trait_method)
       else
-        opt.call(*args)
+        instance_exec(*args, &opt)
       end
     end
   end
@@ -63,7 +63,7 @@ class ConflictResolutionCustom
   def solve(current_method, other_trait_method, _)
     func = function
     proc do |*args|
-      func.call(current_method, other_trait_method, *args)
+      instance_exec(current_method, other_trait_method, *args, &func)
     end
   end
 
