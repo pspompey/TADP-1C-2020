@@ -8,7 +8,7 @@ class ConflictResolutionExecAll
       @results = []
       @results << current_method.call(*args)
       @results << other_trait_method.call(*args)
-      @results.each { |_, result| result }
+      @results
     end
   end
 

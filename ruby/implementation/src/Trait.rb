@@ -81,4 +81,9 @@ class Trait
     trait
   end
 
+  def define_methods(container_class)
+    self.methods.each do |selector, method|
+      container_class.define_method(selector, method)
+    end
+  end
 end
