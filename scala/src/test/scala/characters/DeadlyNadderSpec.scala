@@ -1,16 +1,16 @@
 package characters
 
-import characters.Stat
-import characters.competitors.Viking
+import competitors.{Stat, Viking}
+import dragons.DeadlyNadder
 import org.scalatest.{FreeSpec, Matchers}
-import characters.dragons.DeadlyNadder
+import requirements.Requirement
 
 class DeadlyNadderSpec extends FreeSpec with Matchers{
 
   "A DeadlyNadder" -{
 
     "when it is instantiated with 40 weight"-{
-      val deadlyNadder = new DeadlyNadder(40)
+      val deadlyNadder = new DeadlyNadder(weight = 40)
 
       "should have 150 damage, 20 speed, 40 weight and 8 capacity" in {
         assert(deadlyNadder.damage == 150)

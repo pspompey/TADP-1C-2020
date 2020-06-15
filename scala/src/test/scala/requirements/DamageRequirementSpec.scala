@@ -1,8 +1,7 @@
 package requirements
 
+import competitors.{Stat, Viking}
 import org.scalatest.{FreeSpec, Matchers}
-import characters.Stat
-import characters.competitors.Viking
 
 class DamageRequirementSpec extends FreeSpec with Matchers{
 
@@ -12,38 +11,38 @@ class DamageRequirementSpec extends FreeSpec with Matchers{
     val weakViking = new Viking(stats = Stat(damage = 50,weight = 40,speed = 20))
 
     "when it requires more than 100 damage" - {
-      val damageRequeriment = new DamageRequeriment(damageRequired = 100<= )
+      val damageRequeriment = new DamageRequirement(damageRequired = 100<= )
 
       "should be true if a viking has more than 100 damage" in {
-        assert(damageRequeriment.require(powerfulViking))
+        assert(damageRequeriment.meetRequirement(powerfulViking))
       }
 
       "should be false if a viking has less than 100 damage" in {
-        assert(!damageRequeriment.require(weakViking))
+        assert(!damageRequeriment.meetRequirement(weakViking))
       }
     }
 
     "when it requires less than 100 damage" - {
-      val damageRequeriment = new DamageRequeriment(damageRequired = 100>= )
+      val damageRequeriment = new DamageRequirement(damageRequired = 100>= )
 
       "should be false if a viking has more than 100 damage" in {
-        assert(!damageRequeriment.require(powerfulViking))
+        assert(!damageRequeriment.meetRequirement(powerfulViking))
       }
 
       "should be true if a viking has less than 100 damage" in {
-        assert(damageRequeriment.require(weakViking))
+        assert(damageRequeriment.meetRequirement(weakViking))
       }
     }
 
     "when it requires 150 damage" - {
-      val damageRequeriment = new DamageRequeriment(damageRequired = 150 ==)
+      val damageRequeriment = new DamageRequirement(damageRequired = 150 ==)
 
       "should be true if a viking has 100 damage" in {
-        assert(damageRequeriment.require(powerfulViking))
+        assert(damageRequeriment.meetRequirement(powerfulViking))
       }
 
       "should be false if a viking doesn't have 100 damage" in {
-        assert(!damageRequeriment.require(weakViking))
+        assert(!damageRequeriment.meetRequirement(weakViking))
       }
     }
   }
