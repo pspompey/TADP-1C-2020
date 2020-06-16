@@ -6,6 +6,7 @@ import requirements._
 sealed trait Dragon {
   val basicSeed: Int = 60
   val stats: Stat
+  val basicRequirements: List[Requirement] = List(MaxWeightRequirement(capacity))
   val requirements: List[Requirement] = List(MaxWeightRequirement(capacity))
   lazy val capacity: Double = stats.weight * 0.2
 
@@ -16,7 +17,7 @@ sealed trait Dragon {
   def canRide(viking: Viking): Boolean = requirements.forall(r => r(viking))
 
   protected def allRequirements(requirements: List[Requirement]*): List[Requirement] ={
-    requirements.fold(this.requirements)((list,requirements) => list ::: requirements)
+    requirements.fold(this.basicRequirements)((list,requirements) => list ::: requirements)
   }
 }
 
