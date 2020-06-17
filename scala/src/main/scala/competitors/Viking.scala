@@ -9,9 +9,10 @@ case class Viking(stats: Stat,hunger: Double,item: Option[Item]){
   def this(stats: Stat,item: Option[Item]) = this(stats,0.0,item)
   def this(stats: Stat) = this(stats,0.0,None)
 
-  def speed = stats.speed
+  def speed: Int = stats.speed
   def weight: Double = stats.weight
   def damage: Int = stats.damage
+
   def capacity: Double = stats.weight * 0.5 + stats.damage * 2
 
   def meetRequirement(requirement: Requirement): Boolean = {
@@ -21,6 +22,7 @@ case class Viking(stats: Stat,hunger: Double,item: Option[Item]){
       case MaxDamageRequirement(damage) => damage >= this.damage
       case MinDamageRequirement(damage) => damage <= this.damage
       case ItemRequirement(item) => item.getClass.equals(this.item.getOrElse(None).getClass)
+      case MinWeightLiftRequirement(weight) => weight <= this.weight
       case _ => true
     }
   }

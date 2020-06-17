@@ -3,7 +3,6 @@ package characters
 import competitors.{Stat, Viking}
 import dragons.DeadlyNadder
 import org.scalatest.{FreeSpec, Matchers}
-import requirements.Requirement
 
 class DeadlyNadderSpec extends FreeSpec with Matchers{
 

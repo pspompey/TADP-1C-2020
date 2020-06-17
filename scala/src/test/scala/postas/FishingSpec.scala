@@ -2,7 +2,7 @@ package postas
 
 import competitors.{Stat, Viking}
 import org.scalatest.{FreeSpec, Matchers}
-import posta.Fishing
+import competitions.Fishing
 
 class FishingSpec extends FreeSpec with Matchers{
 

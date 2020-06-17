@@ -12,3 +12,4 @@ case class MinCapacityRequirement(capacity: Double) extends Requirement
 case class MinDamageRequirement(damage: Int) extends Requirement
 case class MaxDamageRequirement(damage: Int) extends Requirement
 case class ItemRequirement(item: Item) extends Requirement
+case class MinWeightLiftRequirement(weight: Double)  extends Requirement
