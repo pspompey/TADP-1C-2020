@@ -15,9 +15,10 @@ class FishingSpec extends FreeSpec with Matchers{
 
     "when it is called with a list of vikings" - {
       "should return the vikings ordered by their capacity" in {
-        val result = Fishing(vikings)
+        val result = new Fishing().apply(vikings)
+        val ordering = List(viking1.increaseHungry(5),viking3.increaseHungry(5),viking2.increaseHungry(5))
 
-        assertResult(List(viking1,viking3,viking2))(result)
+        assertResult(ordering)(result)
       }
     }
 
