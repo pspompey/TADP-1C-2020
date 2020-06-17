@@ -35,9 +35,8 @@ case class Viking(stats: Stat, var hunger: Double,item: Option[Item]){
   }
 
   def increaseHungry(hunger: Double): Viking = {
-    val viking = this.copy()
     this.hunger += hunger
-    viking
+    this
   }
 
 }

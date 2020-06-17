@@ -17,7 +17,7 @@ case class Fight(requirements: List[Requirement]) extends Competition {
 
   override def apply(vikings: List[Viking]): List[Viking] = {
     vikings.filter(viking => requirements.forall(r => viking.meetRequirement(r)))
-      .sortBy(_.damage)(Ordering[Int].reverse).map(viking => viking.increaseHungry(this.basicEfect))
+      .sortBy(_.damage)(Ordering[Int].reverse).map(viking => viking.copy().increaseHungry(this.basicEfect))
   }
 }
 

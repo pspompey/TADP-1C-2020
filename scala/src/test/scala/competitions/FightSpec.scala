@@ -16,8 +16,8 @@ class FightSpec extends FreeSpec with Matchers{
     "when it is called with a list of vikings" - {
       "should return the vikings ordered by their damage" in {
         val result = Fight(requirements = List[Requirement]()).apply(vikings)
-
-        result shouldBe 1
+        val ordering = vikings.sortBy(_.damage)(Ordering[Int].reverse).map(viking => viking.copy().increaseHungry(hunger = 5.0))
+        assertResult(ordering)(result)
       }
     }
 
