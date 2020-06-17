@@ -4,7 +4,7 @@ import dragons.Dragon
 import items.{Item, Weapon}
 import requirements._
 
-case class Viking(stats: Stat,hunger: Double,item: Option[Item]){
+case class Viking(stats: Stat, var hunger: Double,item: Option[Item]){
 
   def this(stats: Stat,item: Option[Item]) = this(stats,0.0,item)
   def this(stats: Stat) = this(stats,0.0,None)
@@ -33,4 +33,11 @@ case class Viking(stats: Stat,hunger: Double,item: Option[Item]){
     else
       None
   }
+
+  def increaseHungry(hunger: Double): Viking = {
+    val viking = this.copy()
+    this.hunger += hunger
+    viking
+  }
+
 }

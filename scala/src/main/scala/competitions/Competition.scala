@@ -1,6 +1,7 @@
 package competitions
 
 import competitors.Viking
+import requirements.Requirement
 
 sealed trait Competition extends (List[Viking] => List[Viking])
 
@@ -11,10 +12,12 @@ case object Fishing extends Competition{
   }
 }
 
+case class Fight(requirements: List[Requirement]) extends Competition {
+  val basicEfect: Double = 5.0
 
-case class Fight() extends Competition {
   override def apply(vikings: List[Viking]): List[Viking] = {
-    vikings.sortBy(_.damage)
+    vikings.filter(viking => requirements.forall(r => viking.meetRequirement(r)))
+      .sortBy(_.damage)(Ordering[Int].reverse).map(viking => viking.increaseHungry(this.basicEfect))
   }
 }
 
