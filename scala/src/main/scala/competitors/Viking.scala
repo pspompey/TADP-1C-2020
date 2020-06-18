@@ -5,16 +5,13 @@ import dragons.Dragon
 import items.{Item, Weapon}
 import requirements._
 
-case class Viking(stats: Stat, var hunger: Double,item: Option[Item]){
+trait Competitor{
 
-  def this(stats: Stat,item: Option[Item]) = this(stats,0.0,item)
-  def this(stats: Stat) = this(stats,0.0,None)
-
-  def speed: Int = stats.speed
-  def weight: Double = stats.weight
-  def damage: Int = stats.damage
-
-  def capacity: Double = stats.weight * 0.5 + stats.damage * 2
+  def speed: Int
+  def weight: Double
+  def damage: Int
+  def capacity: Double
+  def compete(competition: Competition): Competitor
 
   def meetRequirement(requirement: Requirement): Boolean = {
     requirement match {
@@ -22,8 +19,26 @@ case class Viking(stats: Stat, var hunger: Double,item: Option[Item]){
       case MinCapacityRequirement(capacity) => capacity <= this.capacity
       case MaxDamageRequirement(damage) => damage >= this.damage
       case MinDamageRequirement(damage) => damage <= this.damage
-      case ItemRequirement(item) => item.getClass.equals(this.item.getOrElse(None).getClass)
       case MinWeightLiftRequirement(weight) => weight <= this.weight
+      case _ => true
+    }
+  }
+}
+
+case class Viking(stats: Stat, var hunger: Double,item: Option[Item]) extends Competitor{
+
+  def this(stats: Stat,item: Option[Item]) = this(stats,0.0,item)
+  def this(stats: Stat) = this(stats,0.0,None)
+
+  override def speed: Int = stats.speed
+  override def weight: Double = stats.weight
+  override def damage: Int = stats.damage
+  override def capacity: Double = stats.weight * 0.5 + stats.damage * 2
+
+  override def meetRequirement(requirement: Requirement): Boolean =
+    super.meetRequirement(requirement) && {
+    requirement match {
+      case ItemRequirement(item) => item.getClass.equals(this.item.getOrElse(None).getClass)
       case NotBeHungry(competition) => this.copy().compete(competition).hunger < 100
       case _ => true
     }
@@ -36,7 +51,7 @@ case class Viking(stats: Stat, var hunger: Double,item: Option[Item]){
       None
   }
 
-  def compete(competition: Competition): Viking = {
+  override def compete(competition: Competition): Viking = {
     this.hunger += competition.basicEfect
     this
   }
@@ -44,6 +59,5 @@ case class Viking(stats: Stat, var hunger: Double,item: Option[Item]){
   def isBetter(otherViking: Viking, competition: Competition): Boolean = {
     this.copy().compete(competition) == competition.apply(List(this.copy(),otherViking.copy())).head
   }
-
 
 }
