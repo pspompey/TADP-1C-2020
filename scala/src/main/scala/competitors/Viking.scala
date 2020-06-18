@@ -1,5 +1,6 @@
 package competitors
 
+import competitions.Competition
 import dragons.Dragon
 import items.{Item, Weapon}
 import requirements._
@@ -23,6 +24,7 @@ case class Viking(stats: Stat, var hunger: Double,item: Option[Item]){
       case MinDamageRequirement(damage) => damage <= this.damage
       case ItemRequirement(item) => item.getClass.equals(this.item.getOrElse(None).getClass)
       case MinWeightLiftRequirement(weight) => weight <= this.weight
+      case NotBeHungry(competition) => this.compete(competition).hunger < 100
       case _ => true
     }
   }
@@ -34,9 +36,10 @@ case class Viking(stats: Stat, var hunger: Double,item: Option[Item]){
       None
   }
 
-  def increaseHungry(hunger: Double): Viking = {
-    this.hunger += hunger
-    this
+  def compete(competition: Competition): Viking = {
+    val viking = this.copy()
+    viking.hunger += competition.basicEfect
+    viking
   }
 
 }
