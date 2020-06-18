@@ -24,7 +24,7 @@ case class Viking(stats: Stat, var hunger: Double,item: Option[Item]){
       case MinDamageRequirement(damage) => damage <= this.damage
       case ItemRequirement(item) => item.getClass.equals(this.item.getOrElse(None).getClass)
       case MinWeightLiftRequirement(weight) => weight <= this.weight
-      case NotBeHungry(competition) => this.compete(competition).hunger < 100
+      case NotBeHungry(competition) => this.copy().compete(competition).hunger < 100
       case _ => true
     }
   }
@@ -37,9 +37,13 @@ case class Viking(stats: Stat, var hunger: Double,item: Option[Item]){
   }
 
   def compete(competition: Competition): Viking = {
-    val viking = this.copy()
-    viking.hunger += competition.basicEfect
-    viking
+    this.hunger += competition.basicEfect
+    this
   }
+
+  def isBetter(otherViking: Viking, competition: Competition): Boolean = {
+    this.copy().compete(competition) == competition.apply(List(this.copy(),otherViking.copy())).head
+  }
+
 
 }

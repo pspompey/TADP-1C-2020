@@ -11,7 +11,7 @@ class FightSpec extends FreeSpec with Matchers{
     val viking1 = new Viking(stats = Stat(damage = 50,weight = 60,speed = 10))
     val viking2 = new Viking(stats = Stat(damage = 30,weight = 70,speed = 10))
     val viking3 = new Viking(stats = Stat(damage = 40,weight = 40,speed = 10))
-    val vikings = List(viking3,viking2,viking1)
+    val vikings = List(viking3.copy(),viking2.copy(),viking1.copy())
     val competition = new Fight()
 
     "when it is called with a list of vikings" - {
