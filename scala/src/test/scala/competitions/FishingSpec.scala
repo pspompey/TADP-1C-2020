@@ -15,7 +15,7 @@ class FishingSpec extends FreeSpec with Matchers{
 
     "when it is called with a list of vikings" - {
       "should return the vikings ordered by their capacity" in {
-        val result = competition.apply(vikings)
+        val result = competition(vikings)
         val ordering = List(viking3.compete(competition),viking2.compete(competition))
 
         assertResult(ordering)(result)

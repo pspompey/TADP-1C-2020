@@ -60,6 +60,6 @@ case class Viking(override val stats: Stat, var hunger: Double, item: Option[Ite
   }
 
   def bestMount(dragons: List[Dragon], competition: Competition): Option[Competitor] = {
-    Some(competition.apply(this :: dragons.flatMap(dragon => this.ride(dragon))).head)
+    Some(competition(this :: dragons.flatMap(ride)).head)
   }
 }

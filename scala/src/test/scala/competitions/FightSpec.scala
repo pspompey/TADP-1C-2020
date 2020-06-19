@@ -16,7 +16,7 @@ class FightSpec extends FreeSpec with Matchers{
 
     "when it is called with a list of vikings" - {
       "should return the vikings ordered by their damage" in {
-        val result = competition.apply(vikings)
+        val result = competition(vikings)
         val ordering = List(viking1.compete(competition),viking3.compete(competition),viking2.compete(competition))
 
         assertResult(ordering)(result)
