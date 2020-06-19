@@ -17,7 +17,7 @@ class BestMount extends FreeSpec with Matchers{
 
     "Best mount" - {
       "should return the rider viking and deadlyNadder" in {
-        assertResult(viking.bestMount(dragons, competition))(viking.ride(deadlyNadder).head.compete(competition))
+        assertResult(viking.bestMount(dragons, competition).head)(viking.ride(deadlyNadder).head.compete(competition))
       }
     }
 

@@ -59,7 +59,7 @@ case class Viking(override val stats: Stat, var hunger: Double, item: Option[Ite
     this.copy().compete(competition) == competition.apply(List(this.copy(),otherViking.copy())).head
   }
 
-  def bestMount(dragons: List[Dragon], competition: Competition): Competitor = {
-    competition.apply(this :: dragons.flatMap(dragon => this.ride(dragon))).head
+  def bestMount(dragons: List[Dragon], competition: Competition): Option[Competitor] = {
+    Some(competition.apply(this :: dragons.flatMap(dragon => this.ride(dragon))).head)
   }
 }
