@@ -22,7 +22,6 @@ case class Fishing(requirements: List[Requirement]) extends Competition {
 
   override def apply(competitors: List[Competitor]): List[Competitor] = {
     super.filterMap(competitors, requirements).sortBy(_.capacity)(Ordering[Double].reverse)
-
   }
 }
 

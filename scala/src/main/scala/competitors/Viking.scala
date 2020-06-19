@@ -37,7 +37,7 @@ case class Viking(override val stats: Stat, var hunger: Double, item: Option[Ite
     super.meetRequirement(requirement) && {
     requirement match {
       case ItemRequirement(item) => item.getClass.equals(this.item.getOrElse(None).getClass)
-      case NotBeHungry(competition) => this.copy().compete(competition).hunger < 100
+      case NotBeHungry(competition) => this.compete(competition).hunger < 100
       case _ => true
     }
   }
@@ -50,12 +50,16 @@ case class Viking(override val stats: Stat, var hunger: Double, item: Option[Ite
   }
 
   def compete(competition: Competition): Viking = {
-    this.hunger += competition.basicEfect
-    this
+    val viking = this.copy()
+    viking.hunger += competition.basicEfect
+    viking
   }
 
   def isBetter(otherViking: Viking, competition: Competition): Boolean = {
     this.copy().compete(competition) == competition.apply(List(this.copy(),otherViking.copy())).head
   }
 
+  def bestMount(dragons: List[Dragon], competition: Competition): Competitor = {
+    competition.apply(this :: dragons.flatMap(dragon => this.ride(dragon))).head
+  }
 }

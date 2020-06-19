@@ -11,9 +11,7 @@ case class Rider(viking: Viking, dragon: Dragon) extends
 
   override def meetRequirement(requirement: Requirement): Boolean = super.meetRequirement(requirement) && viking.meetRequirement(requirement)
 
-  def compete(competition: Competition): Rider = {
-    viking.compete(competition)
-    this
-  }
+  def compete(competition: Competition): Rider = Rider(viking.compete(competition), this.dragon)
+
 }
 

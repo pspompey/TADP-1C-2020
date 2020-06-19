@@ -26,7 +26,6 @@ case class DeadlyNadder(override val weight: Double, listOfRequirements: List[Re
 
   lazy val stats: Stat = Stat(damage = 150,weight = weight, speed = basicSeed)
 
-
   def this(weight:Double) = this(weight,List[Requirement]())
 
   override val requirements: List[Requirement] = super.allRequirements(List[Requirement](MaxDamageRequirement(stats.damage)),listOfRequirements)
@@ -36,7 +35,6 @@ case class DeadlyNadder(override val weight: Double, listOfRequirements: List[Re
 case class NightFury(override val damage:Int, override val weight: Double, listOfRequirements: List[Requirement]) extends Dragon{
 
   lazy val stats: Stat = Stat(damage = damage,weight = weight, speed = basicSeed * 3)
-
 
   def this(damage: Int, weight:Double) = this(damage,weight,List[Requirement]())
 
@@ -48,7 +46,6 @@ case class NightFury(override val damage:Int, override val weight: Double, listO
 case class Gronckle(override val weight: Double, maxCapacity: Double, listOfRequirements: List[Requirement]) extends Dragon{
 
   lazy val stats: Stat = Stat(damage = (weight * 5).toInt, weight = weight, speed = basicSeed / 2)
-
 
   def this(weight:Double,maxCapacity: Double) = this(weight,maxCapacity,List[Requirement]())
 
