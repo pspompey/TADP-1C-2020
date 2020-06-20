@@ -13,6 +13,7 @@ abstract class Competitor(val stats: Stat){
 
   def capacity: Double
   def compete(competition: Competition): Competitor
+  def setHunger(hunger: Double): Competitor
 
   def meetRequirement(requirement: Requirement): Boolean = {
     requirement match {
@@ -32,6 +33,10 @@ case class Viking(override val stats: Stat, var hunger: Double, item: Option[Ite
   def this(stats: Stat) = this(stats,0.0,None)
 
   def capacity: Double = stats.weight * 0.5 + stats.damage * 2
+  def setHunger(hunger: Double): Competitor = {
+    this.hunger = hunger
+    this
+  }
 
   override def meetRequirement(requirement: Requirement): Boolean =
     super.meetRequirement(requirement) && {
@@ -60,6 +65,6 @@ case class Viking(override val stats: Stat, var hunger: Double, item: Option[Ite
   }
 
   def bestMount(dragons: List[Dragon], competition: Competition): Option[Competitor] = {
-    Some(competition(this :: dragons.flatMap(ride)).head)
+    Some(competition(this :: dragons.flatMap(ride)).head.setHunger(this.hunger))
   }
 }

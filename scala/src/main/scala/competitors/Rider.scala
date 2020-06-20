@@ -13,5 +13,9 @@ case class Rider(viking: Viking, dragon: Dragon) extends
 
   def compete(competition: Competition): Rider = Rider(viking.compete(competition), this.dragon)
 
+  def setHunger(hunger: Double): Competitor = {
+    this.viking.setHunger(hunger)
+    this
+  }
 }
 
