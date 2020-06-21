@@ -12,7 +12,8 @@ abstract class Competitor(val stats: Stat){
   def damage: Int = stats.damage
 
   def capacity: Double
-  def compete(competition: Competition): Competitor
+  def compete(competition: Competition): Viking
+
   def setHunger(hunger: Double): Competitor
 
   def meetRequirement(requirement: Requirement): Boolean = {
@@ -33,7 +34,8 @@ case class Viking(override val stats: Stat, var hunger: Double, item: Option[Ite
   def this(stats: Stat) = this(stats,0.0,None)
 
   def capacity: Double = stats.weight * 0.5 + stats.damage * 2
-  def setHunger(hunger: Double): Competitor = {
+
+  def setHunger(hunger: Double): Viking = {
     this.hunger = hunger
     this
   }
@@ -49,7 +51,7 @@ case class Viking(override val stats: Stat, var hunger: Double, item: Option[Ite
 
   def ride(dragon: Dragon):Option[Rider] = {
     if(dragon.canRide(this))
-      Some(Rider(viking = this.copy(),dragon = dragon))
+      Some(Rider(viking = this.copy(), dragon = dragon.setAvailable(false)))
     else
       None
   }
@@ -61,10 +63,14 @@ case class Viking(override val stats: Stat, var hunger: Double, item: Option[Ite
   }
 
   def isBetter(otherViking: Viking, competition: Competition): Boolean = {
-    this.copy().compete(competition) == competition.apply(List(this.copy(),otherViking.copy())).head
+    this == competition.simulate(List(this.copy(),otherViking.copy())).head
   }
 
   def bestMount(dragons: List[Dragon], competition: Competition): Option[Competitor] = {
-    Some(competition(this :: dragons.flatMap(ride)).head.setHunger(this.hunger))
+    val result = competition.simulate(this :: dragons.flatMap(ride))
+    if(result.isEmpty)
+      None
+    else
+      Some(result.head)
   }
 }
