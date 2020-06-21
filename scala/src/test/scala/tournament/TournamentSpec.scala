@@ -20,12 +20,12 @@ class TournamentSpec extends FreeSpec with Matchers{
     val gronckle = new Gronckle(weight = 100, maxCapacity = 60)
     val dragons = List(deadlyNadder, nightFury, gronckle)
 
-    val competitions = List(new Fight(), new Race(1), Fishing(List[Requirement](MaxDamageRequirement(0))))
+    val competitions = List(Fishing(List[Requirement](MaxDamageRequirement(0))))
     val tournament = Tournament(competitions, dragons, Standard)
 
     "when it is called with a list of vikings" - {
       "should return the vikings ordered by their capacity" in {
-        assertResult(tournament(vikings))(Some(viking3.setHunger(6)))
+        assertResult(tournament(vikings))(None)
       }
     }
 

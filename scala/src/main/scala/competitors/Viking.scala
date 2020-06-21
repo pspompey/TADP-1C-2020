@@ -34,6 +34,7 @@ case class Viking(override val stats: Stat, var hunger: Double, item: Option[Ite
   def this(stats: Stat) = this(stats,0.0,None)
 
   def capacity: Double = stats.weight * 0.5 + stats.damage * 2
+  override def damage: Int = super.damage + item.map(_.damage).getOrElse(0)
 
   def setHunger(hunger: Double): Viking = {
     this.hunger = hunger
@@ -67,10 +68,6 @@ case class Viking(override val stats: Stat, var hunger: Double, item: Option[Ite
   }
 
   def bestMount(dragons: List[Dragon], competition: Competition): Option[Competitor] = {
-    val result = competition.simulate(this :: dragons.flatMap(ride))
-    if(result.isEmpty)
-      None
-    else
-      Some(result.head)
+    competition.simulate(this :: dragons.flatMap(ride)).headOption
   }
 }
