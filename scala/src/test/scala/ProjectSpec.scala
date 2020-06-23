@@ -1,3 +1,4 @@
+import Competidor.{Hacha, Stats, Vikingo}
 import org.scalatest.{FreeSpec, Matchers}
 
 class ProjectSpec extends FreeSpec with Matchers {
@@ -39,6 +40,8 @@ class ProjectSpec extends FreeSpec with Matchers {
     }
     "Astrid" - {
       "item hacha aumenta 30 puntos daño" in {
+        val astrid : Vikingo = Vikingo(Stats(60,3,5), Hacha)
+        astrid.danio shouldBe 35
 
       }
     }

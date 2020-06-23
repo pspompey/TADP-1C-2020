@@ -1,30 +1,32 @@
 package Competidor
 
 
-case class Vikingo (_velocidad: Double, _daño: Double, _peso: Double, _barbarosidad: Double, _item: Item)  {
-  def barbarosidad = _barbarosidad
-  def hambre = 0
-  def item = _item
-  def velocidad = _velocidad
-  def peso = _peso
-  def daño = _item match {
-        case Hacha => _daño + 30
-        case Mazo => _daño + 100
-        case _ => _daño
-    }
+case class Vikingo(stats: Stats, item: Item) {
+  val peso: Double = stats.peso
+  val velocidad: Int = stats.velocidad
+  val barbarosidad: Int = stats.barbarosidad
+  val nivelHambre: Int = stats.nivelHambre
 
-  def aumentarHambre(cantidad: Double): Vikingo ={
-    hambre += cantidad
-    this
+  lazy val danio: Int = {
+    item match {
+      case Hacha => barbarosidad + 30
+      case Mazo => barbarosidad + 100
+      case _ => barbarosidad
+    }
   }
+
+  def aumentarHambre (cantidad: Int): Vikingo = copy (stats = stats.aumentarHambre (cantidad) )
+
 }
 
-
-
+object Astrid extends Vikingo(Stats(60,3,5), Hacha){}
 
 trait Item
 
 case object SistemaVuelo extends Item
+
 case object Hacha extends Item
+
 case object Mazo extends Item
+
 case object Comestible extends Item
