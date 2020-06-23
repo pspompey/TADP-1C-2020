@@ -2,6 +2,8 @@ package Competidor
 
 import Dragon.Dragon
 
+import scala.util.Try
+
 
 case class Vikingo(stats: Stats, item: Item) {
   val peso: Double = stats.peso
@@ -19,7 +21,7 @@ case class Vikingo(stats: Stats, item: Item) {
 
   def aumentarHambre (cantidad: Int): Vikingo = copy (stats = stats.aumentarHambre (cantidad) )
 
-  // def intentarMontarDragon (dragon: Dragon)
+  def intentarMontarDragon (dragon: Dragon): Try[Jinete] = ???
 }
 
 case object Astrid extends Vikingo(Stats(60,3,5), Hacha){}
@@ -38,3 +40,5 @@ case object Hacha extends Item
 case object Mazo extends Item
 
 case object Comestible extends Item
+
+
