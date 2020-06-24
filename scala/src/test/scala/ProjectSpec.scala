@@ -1,4 +1,4 @@
-import Competidor.{Hacha, Stats, Vikingo}
+import Participante.{Hacha, Stats, Vikingo}
 import Dragon.Gronckle
 import org.scalatest.{FreeSpec, Matchers}
 

@@ -1,44 +1,44 @@
 package Dragon
 
-import Competidor.{Item, SistemaVuelo, Vikingo}
+import Participante.{Item, SistemaVuelo, Vikingo}
 
 sealed trait Dragon {
 
-  val peso: Int
-  val danio: Int
+  val peso: Double
+  val danio: Double
   val restriccionesBase: List[Restriccion] = List(RestriccionBasePeso(pesoTolerado))
   val restricciones: List[Restriccion]
   lazy val pesoTolerado: Double = peso * 0.2
-  val disponible = true
+//  val disponible = true
 
 
 //TODO : ver tema DISPONIBILIDAD para no modificar estado de un Dragon y generar un nuevo Dragon
   // Necesitamos un nuevo dragon?
   // def cambiarDisponibilidad(): Dragon
 
-  def velocidadBase: Int = 60  //Lo hicimos como un metodo para poder realizar super, cosa que val no permite...
-  def velocidad: Int = velocidadBase - peso
+  def velocidadBase: Double = 60  //Lo hicimos como un metodo para poder realizar super, cosa que val no permite...
+  def velocidad: Double = velocidadBase - peso
 
   def todasRestricciones: List[Restriccion] = List.concat(restricciones, restriccionesBase)
-  def admiteVikingo(vikingo: Vikingo): Boolean = disponible && todasRestricciones.forall(restric => restric(vikingo))
+  def admiteVikingo(vikingo: Vikingo): Boolean = todasRestricciones.forall(restric => restric(vikingo)) // && disponible
 
 
 
 }
 
 
-case class FuriaNocturna(danio: Int, peso: Int, restricciones: List[Restriccion] = List[Restriccion]()) extends Dragon {
-  override def velocidad: Int = super.velocidad * 3
+case class FuriaNocturna(danio: Double, peso: Double, restricciones: List[Restriccion] = List[Restriccion]()) extends Dragon {
+  override def velocidad: Double = super.velocidad * 3
 
 
 }
-case class NadderMortifero(peso:Int, restricciones: List[Restriccion] = List[Restriccion]()) extends  Dragon{
-  val danio = 150
+case class NadderMortifero(peso:Double, restricciones: List[Restriccion] = List[Restriccion]()) extends  Dragon{
+  val danio: Double = 150
 }
 
-case class Gronckle(peso: Int, restricciones: List[Restriccion] = List[Restriccion]()) extends Dragon{
-  val danio: Int = 5 * peso
-  override def velocidadBase: Int = super.velocidadBase / 2
+case class Gronckle(peso: Double, restricciones: List[Restriccion] = List[Restriccion]()) extends Dragon{
+  val danio: Double = 5 * peso
+  override def velocidadBase: Double = super.velocidadBase / 2
 
 }
 
