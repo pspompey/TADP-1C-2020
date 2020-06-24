@@ -1,4 +1,5 @@
 import Competidor.{Hacha, Stats, Vikingo}
+import Dragon.Gronckle
 import org.scalatest.{FreeSpec, Matchers}
 
 class ProjectSpec extends FreeSpec with Matchers {
@@ -40,7 +41,7 @@ class ProjectSpec extends FreeSpec with Matchers {
     }
     "Astrid" - {
       "item hacha aumenta 30 puntos daño" in {
-        val astrid : Vikingo = Vikingo(Stats(60,3,5), Hacha)
+        val astrid: Vikingo = Vikingo(Stats(60, 3, 5), Hacha)
         astrid.danio shouldBe 35
 
       }
@@ -59,6 +60,11 @@ class ProjectSpec extends FreeSpec with Matchers {
 
       }
       "Gronckle: velocidad base a la mitad. Daño es 5 veces su peso" in {
+        val gronckle: Gronckle = Gronckle(10)
+        gronckle.velocidadBase shouldBe 30
+        gronckle.velocidad shouldBe 20
+      }
+      "Gronckle:Daño es 5 veces su peso" in {
 
       }
     }

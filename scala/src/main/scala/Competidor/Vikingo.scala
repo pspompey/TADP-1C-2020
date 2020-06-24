@@ -23,14 +23,14 @@ case class Vikingo(stats: Stats, item: Item) {
 
   def intentarMontarDragon (dragon: Dragon): Try[Jinete] = ???
 }
-
+/*
 case object Astrid extends Vikingo(Stats(60,3,5), Hacha){}
 case object Hipo extends Vikingo(Stats(70,4,5), SistemaVuelo){}
 case object Patan extends Vikingo(Stats(40,2,9), Mazo){}
 case object Patapez extends Vikingo(Stats(80,1,5), Comestible){
   ???
 }
-
+*/
 trait Item
 
 case object SistemaVuelo extends Item
