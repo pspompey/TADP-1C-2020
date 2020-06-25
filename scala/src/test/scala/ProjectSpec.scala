@@ -1,5 +1,6 @@
-import Participante.{Hacha, Stats, Vikingo}
-import Dragon.Gronckle
+import Participante._
+import Dragon.{FuriaNocturna, Gronckle}
+import Requerimiento._
 import org.scalatest.{FreeSpec, Matchers}
 
 class ProjectSpec extends FreeSpec with Matchers {
@@ -41,7 +42,7 @@ class ProjectSpec extends FreeSpec with Matchers {
     }
     "Astrid" - {
       "item hacha aumenta 30 puntos daño" in {
-        val astrid: Vikingo = Vikingo(Stats(60, 3, 5), Hacha)
+        val astrid: Vikingo = Vikingo(Stats(60, 3, 5), Some(Hacha))
         astrid.danio shouldBe 35
 
       }
@@ -81,20 +82,35 @@ class ProjectSpec extends FreeSpec with Matchers {
       //Para estos tres anteriores hambre vikingo +5%
       //(estos si tienen efecto)
     }
+    "Postas" - {
+      "Requerimiento Pesca" in {
+        val vikingo: Vikingo = Vikingo(Stats(50, 10, 10))
+        val requerimientoPesca: PesoMinimoALevantar = PesoMinimoALevantar(40)
 
-    //Pesca: Puede existir requerimiento de peso minimo a levantar para el participante
-    //Combate: Debe tener al menos X grado de barbaridad o arma equipada
-    //Carrera: Puede requerir uso de montura
-    //(No pueden participar vikingos que luego de este, lleguen al 100% de hambre). Descartar vikingos no cumplan pre-requisitos. Efecto sobre participantes. Resultado de la posta
-    //
-    //Ganador posta
-    //Varios participantes en posta
-    //
-    //mejor montura
-    //torneo varios
-    //reglas varias
+        requerimientoPesca(vikingo) shouldBe true
+      }
+
+      "Requerimiento Carrera" in {
+        val vikingo: Vikingo = Vikingo(Stats(50, 10, 10))
+        val primoDeChimuelo: FuriaNocturna = FuriaNocturna(20, 260)
+        val jinete: Jinete = vikingo.intentarMontarDragon(primoDeChimuelo).get
+
+        CumpleConMontura(jinete) shouldBe true
+      }
+      //Pesca: Puede existir requerimiento de peso minimo a levantar para el participante
+      //Combate: Debe tener al menos X grado de barbaridad o arma equipada
+      //Carrera: Puede requerir uso de montura
+      //(No pueden participar vikingos que luego de este, lleguen al 100% de hambre). Descartar vikingos no cumplan pre-requisitos. Efecto sobre participantes. Resultado de la posta
+      //
+      //Ganador posta
+      //Varios participantes en posta
+      //
+      //mejor montura
+      //torneo varios
+      //reglas varias
+    }
+
   }
-
 }
 
 

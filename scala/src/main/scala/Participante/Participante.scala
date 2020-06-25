@@ -1,6 +1,8 @@
 package Participante
 
 import Dragon.Dragon
+import Postas.Posta
+
 import scala.util.{Failure, Success, Try}
 
 sealed trait Participante {
@@ -8,19 +10,23 @@ sealed trait Participante {
   val velocidad: Double
   val pesoTolerado: Double
   val danio: Double
+  val barbarosidad: Int
+  val item: Option[Item]
+  val nivelHambre: Int
 
+  def aumentarHambre(porcentaje: Int): Vikingo
 }
 
-case class Vikingo(stats: Stats, item: Item) extends Participante {
+case class Vikingo(stats: Stats, item: Option[Item] = None) extends Participante {
   val peso: Double = stats.peso
-  val barbarosidad: Int = stats.barbarosidad
-  val nivelHambre: Int = stats.nivelHambre
+  override val nivelHambre: Int = stats.nivelHambre
+  override val barbarosidad: Int = stats.barbarosidad
   override val velocidad: Double = stats.velocidad
 
   override val danio: Double = {
     item match {
-      case Hacha => barbarosidad + 30
-      case Mazo => barbarosidad + 100
+      case Some(Hacha) => barbarosidad + 30
+      case Some(Mazo) => barbarosidad + 100
       case _ => barbarosidad
     }
   }
@@ -28,12 +34,16 @@ case class Vikingo(stats: Stats, item: Item) extends Participante {
   override val pesoTolerado: Double = peso / 2 + barbarosidad * 2
 
 
-  def aumentarHambre(cantidad: Int): Vikingo = copy(stats = stats.aumentarHambre(cantidad))
+  override def aumentarHambre(porcentaje: Int): Vikingo = copy(stats = stats.aumentarHambre(porcentaje))
+
 
   def intentarMontarDragon(dragon: Dragon): Try[Jinete] = {
     if (dragon.admiteVikingo(this)) Success(Jinete(this, dragon))
     else Failure(NoAdmiteVikingoException())
   }
+
+  def esMejorQue(otroVikingo: Vikingo)(posta: Posta): Boolean = ???
+
 }
 
 /*
@@ -62,6 +72,10 @@ case class Jinete(vikingo: Vikingo, dragon: Dragon) extends Participante {
   override val velocidad: Double = dragon.velocidad - 1 * vikingo.peso
   override val danio: Double = vikingo.danio + dragon.danio
   override val pesoTolerado: Double = dragon.pesoTolerado - vikingo.peso
+  override val barbarosidad: Int = vikingo.barbarosidad
+  override val item: Option[Item] = vikingo.item
+  override val nivelHambre: Int = vikingo.nivelHambre
 
+  override def aumentarHambre(porcentaje: Int): Vikingo = vikingo.copy(stats = vikingo.stats.aumentarHambre(porcentaje))
 
 }
