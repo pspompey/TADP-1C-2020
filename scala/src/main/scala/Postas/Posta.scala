@@ -30,5 +30,7 @@ case class Pesca(pesoMinALevantar: Double) extends Posta{
   }
 
 
-  override def apply(participantes:List[Participante]): List[Vikingo] = ???
+  override def apply(participantes:List[Participante]): List[Vikingo] =
+    participantes.map(cada => participar(cada)).filter(cada => puedeParticipar(cada)).
+      sortBy(cada => cada.pesoTolerado)
 }

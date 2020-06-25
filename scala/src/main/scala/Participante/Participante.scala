@@ -44,6 +44,8 @@ case class Vikingo(stats: Stats, item: Option[Item] = None) extends Participante
 
   def esMejorQue(otroVikingo: Vikingo)(posta: Posta): Boolean = ???
 
+  // def mejorMontura(dragones: List[Dragon]): Participante = dragones.map(cada => intentarMontarDragon(cada) )
+
 }
 
 /*
