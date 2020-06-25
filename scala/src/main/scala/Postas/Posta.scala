@@ -33,3 +33,44 @@ case class Pesca(pesoMinALevantar: Double) extends Posta{
   override def apply(participantes:List[Participante]): List[Vikingo] =
     participantes.filter(puedeParticipar).sortBy(_.pesoTolerado).reverse.map(participar)
 }
+
+case class Combate(barbarosidadMinima: Int) extends Posta{
+  override val requerimientoBase: Restriccion[Participante] = BarbarosidadMinimaOArmaEquipada(barbarosidadMinima)
+
+  override def participar(participante: Participante): Vikingo = {
+    //Luego de participar en una posta de combate los vikingos incrementan 10% de su nivel de hambre. Y 5% en el caso de que sea jiente
+    participante match {
+      case p: Vikingo => p.aumentarHambre(10)
+      case p => p.aumentarHambre(5)
+    }
+  }
+
+  override def puedeParticipar(participante: Participante): Boolean = {
+    prerrequisito(participar(participante)) && requerimientoBase(participante)
+  }
+
+
+  override def apply(participantes:List[Participante]): List[Vikingo] =
+    participantes.filter(puedeParticipar).sortBy(_.danio).reverse.map(participar)
+}
+
+
+case class Carrera(distancia: Int, conMontura: Boolean) extends Posta{
+  override val requerimientoBase: Restriccion[Participante] = CumpleConMontura
+
+  override def participar(participante: Participante): Vikingo = {
+    //Luego de participar en una posta de carrera los vikingos su nivel de hambre segun la distancia. Y 5% en el caso de que sea jiente
+    participante match {
+      case p: Vikingo => p.aumentarHambre(distancia)
+      case p => p.aumentarHambre(5)
+    }
+  }
+
+  override def puedeParticipar(participante: Participante): Boolean = {
+    prerrequisito(participar(participante)) && (!conMontura || requerimientoBase(participante))
+  }
+
+
+  override def apply(participantes:List[Participante]): List[Vikingo] =
+    participantes.filter(puedeParticipar).sortBy(_.velocidad).reverse.map(participar)
+}

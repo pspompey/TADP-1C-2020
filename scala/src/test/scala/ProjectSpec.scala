@@ -125,14 +125,59 @@ class ProjectSpec extends FreeSpec with Matchers {
         postaPesca(List(vikingoAlto, vikingoCapo, vikingoChiquito, vikingoParticipaPorSerJinete)) shouldBe List(vikingoNoParticipa.aumentarHambre(5),vikingoCapo.aumentarHambre(5), vikingoAlto.aumentarHambre(5), vikingoChiquito.aumentarHambre(5))
 
       }
+      "Combate con varios participantes" in {
+        val vikingoCapo: Vikingo = Vikingo(Stats(80, 10, 100)) // barbarosidad = 100
+        val vikingoChiquito: Vikingo = Vikingo(Stats(50, 10, 10)) // 10
+        val vikingoAlto: Vikingo = Vikingo(Stats(70, 10, 5), Some(Hacha)) // 35
+        val vikingoNoParticipa: Vikingo = Vikingo(Stats(40, 10, 5)) // 5
+        val primoDeChimuelo: FuriaNocturna = FuriaNocturna(20, 600)
 
-      "Requerimiento Carrera" in {
+        val vikingoNoParticipaYEsJinete: Jinete = vikingoNoParticipa.intentarMontarDragon(primoDeChimuelo).get // 35
+
+        val postaCombate: Combate = Combate(8)
+
+        postaCombate(List(vikingoAlto, vikingoCapo, vikingoChiquito, vikingoNoParticipaYEsJinete)) shouldBe List(vikingoCapo.aumentarHambre(10), vikingoAlto.aumentarHambre(10), vikingoChiquito.aumentarHambre(10))
+
+      }
+
+      "Combate con varios participantes y uno que no participa, entra por el item" in {
+        val vikingoCapo: Vikingo = Vikingo(Stats(80, 10, 100)) // barbarosidad = 100
+        val vikingoChiquito: Vikingo = Vikingo(Stats(50, 10, 10)) // 10
+        val vikingoAlto: Vikingo = Vikingo(Stats(70, 10, 5), Some(Hacha)) // 35
+        val vikingoNoParticipa: Vikingo = Vikingo(Stats(40, 10, 10)) // 10
+        val primoDeChimuelo: FuriaNocturna = FuriaNocturna(20, 600)
+
+        val vikingoParticipaPorSerJinete: Jinete = vikingoNoParticipa.intentarMontarDragon(primoDeChimuelo).get // 30
+
+        val postaCombate: Combate = Combate(8)
+
+         postaCombate(List(vikingoAlto, vikingoCapo, vikingoChiquito, vikingoParticipaPorSerJinete)) shouldBe List(vikingoCapo.aumentarHambre(10), vikingoAlto.aumentarHambre(10),vikingoNoParticipa.aumentarHambre(5), vikingoChiquito.aumentarHambre(10))
+
+      }
+      "Requerimiento Carrera con montura" in {
         val vikingo: Vikingo = Vikingo(Stats(50, 10, 10))
         val primoDeChimuelo: FuriaNocturna = FuriaNocturna(20, 260)
         val jinete: Jinete = vikingo.intentarMontarDragon(primoDeChimuelo).get
 
+        val postaCarrera: Carrera = Carrera(10,true)
         CumpleConMontura(jinete) shouldBe true
+        postaCarrera(List(vikingo, jinete)) shouldBe List(vikingo.aumentarHambre(5))
       }
+
+      "Requerimiento Carrera sin montura requerida" in {
+        val vikingo: Vikingo = Vikingo(Stats(1, 1, 10))
+        val primoDeChimuelo: FuriaNocturna = FuriaNocturna(20, 10)
+        val jinete: Jinete = vikingo.intentarMontarDragon(primoDeChimuelo).get // 150 - 1 = 149
+        val vikingoCapo: Vikingo = Vikingo(Stats(80, 20, 100)) // velocidad = 20
+        val vikingoChiquito: Vikingo = Vikingo(Stats(50, 10, 10)) // 10
+
+        val postaCarrera: Carrera = Carrera(10,false)
+
+        //primoDeChimuelo.velocidad shouldBe 150
+        //jinete.velocidad shouldBe 149
+        postaCarrera(List(jinete, vikingoCapo, vikingoChiquito)) shouldBe List(vikingo.aumentarHambre(5), vikingoCapo.aumentarHambre(10),vikingoChiquito.aumentarHambre(10))
+      }
+
       //Pesca: Puede existir requerimiento de peso minimo a levantar para el participante
       //Combate: Debe tener al menos X grado de barbaridad o arma equipada
       //Carrera: Puede requerir uso de montura
