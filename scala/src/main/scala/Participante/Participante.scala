@@ -42,9 +42,11 @@ case class Vikingo(stats: Stats, item: Option[Item] = None) extends Participante
     else Failure(NoAdmiteVikingoException())
   }
 
-  def esMejorQue(otroVikingo: Vikingo)(posta: Posta): Boolean = ???
+  def esMejorQue(otroVikingo: Vikingo)(posta: Posta): Boolean = {
+    posta(List(this,otroVikingo)).head == this
+  }
 
-  // def mejorMontura(dragones: List[Dragon]): Participante = dragones.map(cada => intentarMontarDragon(cada) )
+//  def mejorMontura(dragones: List[Dragon])(posta: Posta): Participante = dragones.map(intentarMontarDragon)
 
 }
 

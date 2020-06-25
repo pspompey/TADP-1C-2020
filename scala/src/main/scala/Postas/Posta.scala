@@ -20,7 +20,7 @@ sealed trait Posta extends (List[Participante] => List[Vikingo]){
 case class Pesca(pesoMinALevantar: Double) extends Posta{
   override val requerimientoBase: Restriccion[Participante] = PesoMinimoALevantar(pesoMinALevantar)
 
-  override def participar(participante: Participante): Participante = {
+  override def participar(participante: Participante): Vikingo = {
     //Luego de participar en una posta de pesca los vikingos incrementan 5% de su nivel de hambre.
     participante.aumentarHambre(5)
   }
@@ -31,6 +31,5 @@ case class Pesca(pesoMinALevantar: Double) extends Posta{
 
 
   override def apply(participantes:List[Participante]): List[Vikingo] =
-    participantes.map(cada => participar(cada)).filter(cada => puedeParticipar(cada)).
-      sortBy(cada => cada.pesoTolerado)
+    participantes.filter(puedeParticipar).sortBy(_.pesoTolerado).reverse.map(participar)
 }

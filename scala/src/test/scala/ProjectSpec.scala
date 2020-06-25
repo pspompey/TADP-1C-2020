@@ -1,5 +1,6 @@
 import Participante._
 import Dragon.{FuriaNocturna, Gronckle}
+import Postas._
 import Requerimiento._
 import org.scalatest.{FreeSpec, Matchers}
 
@@ -88,6 +89,41 @@ class ProjectSpec extends FreeSpec with Matchers {
         val requerimientoPesca: PesoMinimoALevantar = PesoMinimoALevantar(40)
 
         requerimientoPesca(vikingo) shouldBe true
+      }
+
+      "Vikingo mejor que otro en pesca" in {
+        val vikingoCapo: Vikingo = Vikingo(Stats(80, 10, 10)) // peso/2 + barbarosidad * 2 = pesoTolerado = 60
+        val vikingoChiquito: Vikingo = Vikingo(Stats(50, 10, 10)) // 45
+
+        val postaPesca: Pesca = Pesca(40)
+
+        vikingoCapo.esMejorQue(vikingoChiquito)(postaPesca) shouldBe true
+      }
+      "Pesca con varios participantes" in {
+        val vikingoCapo: Vikingo = Vikingo(Stats(80, 10, 10)) // peso/2 + barbarosidad * 2 = pesoTolerado = 60
+        val vikingoChiquito: Vikingo = Vikingo(Stats(50, 10, 10)) // 45
+        val vikingoAlto: Vikingo = Vikingo(Stats(70, 10, 10)) // 55
+        val vikingoNoParticipa: Vikingo = Vikingo(Stats(40, 10, 5)) // 30
+
+        val postaPesca: Pesca = Pesca(40)
+
+        postaPesca(List(vikingoAlto, vikingoCapo, vikingoChiquito, vikingoNoParticipa)) shouldBe List(vikingoCapo.aumentarHambre(5), vikingoAlto.aumentarHambre(5), vikingoChiquito.aumentarHambre(5))
+
+      }
+
+      "Pesca con varios participantes y un jinete" in {
+        val vikingoCapo: Vikingo = Vikingo(Stats(80, 10, 10)) // peso/2 + barbarosidad * 2 = pesoTolerado = 60
+        val vikingoChiquito: Vikingo = Vikingo(Stats(50, 10, 10)) // 45
+        val vikingoAlto: Vikingo = Vikingo(Stats(70, 10, 10)) // 55
+        val vikingoNoParticipa: Vikingo = Vikingo(Stats(40, 10, 5)) // 30
+        val primoDeChimuelo: FuriaNocturna = FuriaNocturna(20, 600)
+
+        val vikingoParticipaPorSerJinete: Jinete = vikingoNoParticipa.intentarMontarDragon(primoDeChimuelo).get
+
+        val postaPesca: Pesca = Pesca(40)
+
+        postaPesca(List(vikingoAlto, vikingoCapo, vikingoChiquito, vikingoParticipaPorSerJinete)) shouldBe List(vikingoNoParticipa.aumentarHambre(5),vikingoCapo.aumentarHambre(5), vikingoAlto.aumentarHambre(5), vikingoChiquito.aumentarHambre(5))
+
       }
 
       "Requerimiento Carrera" in {
