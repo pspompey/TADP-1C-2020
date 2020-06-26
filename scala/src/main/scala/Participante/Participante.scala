@@ -1,7 +1,7 @@
 package Participante
 
 import Dragon.Dragon
-import Postas.Posta
+import Postas._
 
 import scala.util.{Failure, Success, Try}
 
@@ -14,6 +14,7 @@ sealed trait Participante {
   val item: Option[Item]
   val nivelHambre: Int
 
+  def participar(posta: Posta): Vikingo
   def aumentarHambre(porcentaje: Int): Vikingo
 }
 
@@ -36,6 +37,11 @@ case class Vikingo(stats: Stats, item: Option[Item] = None) extends Participante
 
   override def aumentarHambre(porcentaje: Int): Vikingo = copy(stats = stats.aumentarHambre(porcentaje))
 
+  override def participar(posta: Posta): Vikingo = posta match {
+    case Pesca(_) => this.aumentarHambre(5)
+    case Combate(_) => this.aumentarHambre(10)
+    case Carrera(km, _) => this.aumentarHambre(km)
+  }
 
   def intentarMontarDragon(dragon: Dragon): Try[Jinete] = {
     if (dragon.admiteVikingo(this)) Success(Jinete(this, dragon))
@@ -43,10 +49,10 @@ case class Vikingo(stats: Stats, item: Option[Item] = None) extends Participante
   }
 
   def esMejorQue(otroVikingo: Vikingo)(posta: Posta): Boolean = {
-    posta(List(this,otroVikingo)).head == this
+    posta(List(this,otroVikingo)).head == this.participar(posta)
   }
 
-//  def mejorMontura(dragones: List[Dragon])(posta: Posta): Participante = dragones.map(intentarMontarDragon)
+  def mejorMontura(dragones: List[Dragon])(posta: Posta): Participante = posta.rankear(dragones.map(d => intentarMontarDragon(d).getOrElse(this))).head
 
 }
 
@@ -81,5 +87,6 @@ case class Jinete(vikingo: Vikingo, dragon: Dragon) extends Participante {
   override val nivelHambre: Int = vikingo.nivelHambre
 
   override def aumentarHambre(porcentaje: Int): Vikingo = vikingo.copy(stats = vikingo.stats.aumentarHambre(porcentaje))
+  override def participar(posta: Posta): Vikingo = this.aumentarHambre(5) // Todas las postas aumentan en 5 el hambre del jinete
 
 }

@@ -3,7 +3,7 @@ package Postas
 import Participante._
 import Requerimiento._
 
-sealed trait Posta extends (List[Participante] => List[Vikingo]){
+sealed trait Posta extends (List[Participante] => List[Vikingo]) {
   /*
   Prerrequisito: no puede participar en una posta si su nivel de hambre tras participar en la posta alcanzaría el 100%
   Tiene requerimientos cada Posta en particular
@@ -13,64 +13,42 @@ sealed trait Posta extends (List[Participante] => List[Vikingo]){
   val prerrequisito: Restriccion[Participante] = NoPuedeSuperarMaxHambre
   val requerimientoBase: Restriccion[Participante]
 
-  def puedeParticipar(participante: Participante): Boolean
-  def participar(participante: Participante): Participante
+  def puedeParticipar(participante: Participante): Boolean = {
+    prerrequisito(participante.participar(this)) && requerimientoBase(participante)
+  }
+
+  def rankear(participantes: List[Participante]): List[Participante] =
+    this match {
+      case Pesca(_) => determinarParticipantes(participantes).sortBy(part => part.pesoTolerado).reverse
+      case Combate(_) => determinarParticipantes(participantes).sortBy(_.danio).reverse
+      case Carrera(_, _) => determinarParticipantes(participantes).sortBy(_.velocidad).reverse
+    }
+
+  def determinarParticipantes(participantes: List[Participante]): List[Participante] = participantes.filter(puedeParticipar)
+
+  override def apply(participantes: List[Participante]): List[Vikingo] = rankear(participantes).map(v => v.participar(this))
 }
 
-case class Pesca(pesoMinALevantar: Double) extends Posta{
+case class Pesca(pesoMinALevantar: Double) extends Posta {
   override val requerimientoBase: Restriccion[Participante] = PesoMinimoALevantar(pesoMinALevantar)
 
-  override def participar(participante: Participante): Vikingo = {
-    //Luego de participar en una posta de pesca los vikingos incrementan 5% de su nivel de hambre.
-    participante.aumentarHambre(5)
-  }
 
-  override def puedeParticipar(participante: Participante): Boolean = {
-    prerrequisito(participar(participante)) && requerimientoBase(participante)
-  }
-
-
-  override def apply(participantes:List[Participante]): List[Vikingo] =
-    participantes.filter(puedeParticipar).sortBy(_.pesoTolerado).reverse.map(participar)
 }
 
-case class Combate(barbarosidadMinima: Int) extends Posta{
+case class Combate(barbarosidadMinima: Int) extends Posta {
   override val requerimientoBase: Restriccion[Participante] = BarbarosidadMinimaOArmaEquipada(barbarosidadMinima)
 
-  override def participar(participante: Participante): Vikingo = {
-    //Luego de participar en una posta de combate los vikingos incrementan 10% de su nivel de hambre. Y 5% en el caso de que sea jiente
-    participante match {
-      case p: Vikingo => p.aumentarHambre(10)
-      case p => p.aumentarHambre(5)
-    }
-  }
 
-  override def puedeParticipar(participante: Participante): Boolean = {
-    prerrequisito(participar(participante)) && requerimientoBase(participante)
-  }
-
-
-  override def apply(participantes:List[Participante]): List[Vikingo] =
-    participantes.filter(puedeParticipar).sortBy(_.danio).reverse.map(participar)
 }
 
 
-case class Carrera(distancia: Int, conMontura: Boolean) extends Posta{
+case class Carrera(distancia: Int, conMontura: Boolean) extends Posta {
   override val requerimientoBase: Restriccion[Participante] = CumpleConMontura
 
-  override def participar(participante: Participante): Vikingo = {
-    //Luego de participar en una posta de carrera los vikingos su nivel de hambre segun la distancia. Y 5% en el caso de que sea jiente
-    participante match {
-      case p: Vikingo => p.aumentarHambre(distancia)
-      case p => p.aumentarHambre(5)
-    }
-  }
-
   override def puedeParticipar(participante: Participante): Boolean = {
-    prerrequisito(participar(participante)) && (!conMontura || requerimientoBase(participante))
+    prerrequisito(participante.participar(this)) && (!conMontura || requerimientoBase(participante))
   }
 
-
-  override def apply(participantes:List[Participante]): List[Vikingo] =
-    participantes.filter(puedeParticipar).sortBy(_.velocidad).reverse.map(participar)
 }
+
+//

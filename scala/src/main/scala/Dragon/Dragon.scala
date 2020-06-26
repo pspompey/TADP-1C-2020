@@ -30,7 +30,9 @@ case class FuriaNocturna(danio: Double, peso: Double, restricciones: List[Restri
   override def velocidad: Double = super.velocidad * 3
 }
 case class NadderMortifero(peso:Double, restricciones: List[Restriccion[Vikingo]] = List[Restriccion[Vikingo]]()) extends  Dragon{
-  val danio: Double = 150
+  //FACU override val restriccionesBase: List[Restriccion[Vikingo]] = List(RestriccionBasePeso(pesoTolerado), DanioVikingoSuperaDanio(this.danio))
+   override val restriccionesBase: List[Restriccion[Vikingo]] = List(RestriccionBasePeso(pesoTolerado), DanioVikingoSuperaDanio(150))
+   val danio: Double = 150
 }
 
 case class Gronckle(peso: Double, restricciones: List[Restriccion[Vikingo]] = List[Restriccion[Vikingo]]()) extends Dragon{

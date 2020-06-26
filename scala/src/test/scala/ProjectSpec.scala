@@ -1,5 +1,5 @@
 import Participante._
-import Dragon.{FuriaNocturna, Gronckle}
+import Dragon._
 import Postas._
 import Requerimiento._
 import org.scalatest.{FreeSpec, Matchers}
@@ -175,7 +175,104 @@ class ProjectSpec extends FreeSpec with Matchers {
 
         //primoDeChimuelo.velocidad shouldBe 150
         //jinete.velocidad shouldBe 149
+
         postaCarrera(List(jinete, vikingoCapo, vikingoChiquito)) shouldBe List(vikingo.aumentarHambre(5), vikingoCapo.aumentarHambre(10),vikingoChiquito.aumentarHambre(10))
+      }
+      "Mejor Montura para carrera puede montar un Dragon" in {
+        val vikingo: Vikingo = Vikingo(Stats(1, 1, 200))
+        val primoDeChimuelo: FuriaNocturna = FuriaNocturna(20, 10)
+        val nadder: NadderMortifero = NadderMortifero(20)
+
+
+        val jinete: Jinete = vikingo.intentarMontarDragon(primoDeChimuelo).get // 150 - 1 = 149
+
+        val postaCarrera: Carrera = Carrera(10,false)
+
+        //primoDeChimuelo.velocidad shouldBe 150
+        //jinete.velocidad shouldBe 149
+        vikingo.mejorMontura(List(primoDeChimuelo,nadder))(postaCarrera) shouldBe jinete
+
+      }
+      "Mejor Montura para carrera, le conviene participar solo" in {
+        val vikingo: Vikingo = Vikingo(Stats(1, 150, 200))  // Vel vikingo 150
+        val primoDeChimuelo: FuriaNocturna = FuriaNocturna(20, 10)
+        val nadder: NadderMortifero = NadderMortifero(20)
+
+
+        val jinete: Jinete = vikingo.intentarMontarDragon(primoDeChimuelo).get // vel jin 150 - 1 = 149
+
+        val postaCarrera: Carrera = Carrera(10,false)
+
+        //primoDeChimuelo.velocidad shouldBe 150
+        //jinete.velocidad shouldBe 149
+        vikingo.mejorMontura(List(primoDeChimuelo,nadder))(postaCarrera) shouldBe vikingo
+
+      }
+      "Mejor Montura para carrera, le conviene participar solo. Pero el req de la posta es ser jinete" in {
+        val vikingo: Vikingo = Vikingo(Stats(1, 150, 200))  // Vel vikingo 150
+        val primoDeChimuelo: FuriaNocturna = FuriaNocturna(20, 10)
+        val nadder: NadderMortifero = NadderMortifero(20)
+
+
+        val jinete: Jinete = vikingo.intentarMontarDragon(primoDeChimuelo).get // vel jin 150 - 1 = 149
+
+        val postaCarrera: Carrera = Carrera(10,true)
+
+
+        vikingo.mejorMontura(List(primoDeChimuelo,nadder))(postaCarrera) shouldBe jinete
+
+      }
+
+
+      "Mejor Montura para carrera entre dos dragones es un dragon" in {
+        val vikingo: Vikingo = Vikingo(Stats(1, 150, 200))  // Vel vikingo 150
+        val primoDeChimuelo: FuriaNocturna = FuriaNocturna(20, 10)
+        val primoDeChimueloFlash: FuriaNocturna = FuriaNocturna(20, 9)
+
+
+        val jinete: Jinete = vikingo.intentarMontarDragon(primoDeChimuelo).get // vel jin 150 - 1 = 149
+        val jineteFlash: Jinete = vikingo.intentarMontarDragon(primoDeChimueloFlash).get // 153 - 1 = 152
+
+        val postaCarrera: Carrera = Carrera(10,false)
+
+
+        vikingo.mejorMontura(List(primoDeChimuelo,primoDeChimueloFlash ))(postaCarrera) shouldBe jineteFlash
+
+      }
+      "Mejor Montura para combate entre dos dragones" in {
+        val vikingo: Vikingo = Vikingo(Stats(1, 150, 200))  // Daño vik 100
+        val primoDeChimuelo: FuriaNocturna = FuriaNocturna(20, 10) // Daño Drag 20
+        val nadder: NadderMortifero = NadderMortifero(200) // Daño 150
+
+
+        val jinete: Jinete = vikingo.intentarMontarDragon(primoDeChimuelo).get // daño 220
+        //val jineteNadder: Jinete = vikingo.intentarMontarDragon(nadder).get // No puede montar nadder
+
+        val postaCombate: Combate = Combate(10)
+
+        vikingo.mejorMontura(List(primoDeChimuelo,nadder ))(postaCombate) shouldBe jinete
+
+      }
+      "Mejor Montura para combate entre dos dragoness" in {
+        val vikingo: Vikingo = Vikingo(Stats(1, 150, 100))  // Daño vik 100
+        val primoDeChimuelo: FuriaNocturna = FuriaNocturna(20, 10) // Daño Drag 20
+        val nadder: NadderMortifero = NadderMortifero(200) // Daño 150
+
+
+        val jinete: Jinete = vikingo.intentarMontarDragon(primoDeChimuelo).get // daño 120
+        val jineteNadder: Jinete = vikingo.intentarMontarDragon(nadder).get // daño 250 //FACU
+
+        val postaCombate: Combate = Combate(10)
+
+        val req:DanioVikingoSuperaDanio = DanioVikingoSuperaDanio(nadder.danio)
+        req(vikingo) shouldBe true
+        val reqPeso: RestriccionBasePeso = RestriccionBasePeso(nadder.pesoTolerado)
+        println(nadder.pesoTolerado)
+        println(nadder.danio)
+        println(nadder.restriccionesBase.length)
+        reqPeso(vikingo) shouldBe true
+        vikingo.mejorMontura(List(primoDeChimuelo,nadder ))(postaCombate) shouldBe jineteNadder //FACU
+
       }
 
       //Pesca: Puede existir requerimiento de peso minimo a levantar para el participante
@@ -185,8 +282,6 @@ class ProjectSpec extends FreeSpec with Matchers {
       //
       //Ganador posta
       //Varios participantes en posta
-      //
-      //mejor montura
       //torneo varios
       //reglas varias
     }

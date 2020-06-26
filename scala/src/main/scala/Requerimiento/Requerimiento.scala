@@ -13,8 +13,8 @@ case class TieneItem(item: Item) extends Restriccion[Vikingo] {
 }
 
 
-case class DanioVikingoSuperaDanio(danio: Int) extends Restriccion[Vikingo] {
-  override def apply(vikingo: Vikingo): Boolean = vikingo.danio > danio
+case class DanioVikingoSuperaDanio(danio: Double) extends Restriccion[Vikingo] {
+  override def apply(vikingo: Vikingo): Boolean = vikingo.danio < danio
 }
 
 case class SuperaPeso(peso: Int) extends Restriccion[Vikingo] {
