@@ -260,18 +260,11 @@ class ProjectSpec extends FreeSpec with Matchers {
 
 
         val jinete: Jinete = vikingo.intentarMontarDragon(primoDeChimuelo).get // daño 120
-        val jineteNadder: Jinete = vikingo.intentarMontarDragon(nadder).get // daño 250 //FACU
+        val jineteNadder: Jinete = vikingo.intentarMontarDragon(nadder).get // daño 250
 
         val postaCombate: Combate = Combate(10)
 
-        val req:DanioVikingoSuperaDanio = DanioVikingoSuperaDanio(nadder.danio)
-        req(vikingo) shouldBe true
-        val reqPeso: RestriccionBasePeso = RestriccionBasePeso(nadder.pesoTolerado)
-        println(nadder.pesoTolerado)
-        println(nadder.danio)
-        println(nadder.restriccionesBase.length)
-        reqPeso(vikingo) shouldBe true
-        vikingo.mejorMontura(List(primoDeChimuelo,nadder ))(postaCombate) shouldBe jineteNadder //FACU
+        vikingo.mejorMontura(List(primoDeChimuelo,nadder ))(postaCombate) shouldBe jineteNadder
 
       }
 
