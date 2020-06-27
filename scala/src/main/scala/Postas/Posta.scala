@@ -14,7 +14,11 @@ sealed trait Posta extends (List[Participante] => List[Vikingo]) {
   val requerimientoBase: Restriccion[Participante]
 
   def puedeParticipar(participante: Participante): Boolean = {
-    prerrequisito(participante.participar(this)) && requerimientoBase(participante)
+
+    participante match {
+      case Patapez => Patapez.nivelHambre < 50 && prerrequisito(participante.participar(this)) && requerimientoBase(participante)
+      case p => prerrequisito(participante.participar(this)) && requerimientoBase(participante)
+    }
   }
 
   def rankear(participantes: List[Participante]): List[Participante] =

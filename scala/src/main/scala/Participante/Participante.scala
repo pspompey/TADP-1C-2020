@@ -15,6 +15,7 @@ sealed trait Participante {
   val nivelHambre: Int
 
   def participar(posta: Posta): Vikingo
+
   def aumentarHambre(porcentaje: Int): Vikingo
 }
 
@@ -49,7 +50,7 @@ case class Vikingo(stats: Stats, item: Option[Item] = None) extends Participante
   }
 
   def esMejorQue(otroVikingo: Vikingo)(posta: Posta): Boolean = {
-    posta(List(this,otroVikingo)).head == this.participar(posta)
+    posta(List(this, otroVikingo)).head == this.participar(posta)
   }
 
   def mejorMontura(dragones: List[Dragon])(posta: Posta): Participante = if (!dragones.isEmpty) {
@@ -60,13 +61,24 @@ case class Vikingo(stats: Stats, item: Option[Item] = None) extends Participante
 
 }
 
+
+object Astrid extends Vikingo(Stats(60, 3, 5), Some(Hacha)) {}
+
+object Patapez extends Vikingo(Stats(80, 1, 5, 60), Some(Comestible)) {
+
+  def disminuirHambre(porcentaje: Int):Vikingo = copy(stats = stats.disminuirHambre(porcentaje))
+
+  override def aumentarHambre(porcentaje: Int): Vikingo = copy(stats = stats.aumentarHambre(2 * porcentaje))
+    .copy(stats = stats.disminuirHambre(item.get match {
+      case Comestible => Comestible.porcentaje
+      case _ => 0
+    }))
+}
+
 /*
-case object Astrid extends Vikingo(Stats(60,3,5), Hacha){}
 case object Hipo extends Vikingo(Stats(70,4,5), SistemaVuelo){}
 case object Patan extends Vikingo(Stats(40,2,9), Mazo){}
-case object Patapez extends Vikingo(Stats(80,1,5), Comestible){
-  ???
-}
+
 */
 
 trait Item
@@ -77,7 +89,9 @@ case object Hacha extends Item
 
 case object Mazo extends Item
 
-case object Comestible extends Item
+case object Comestible extends Item {
+  val porcentaje: Int = 10
+}
 
 case class NoAdmiteVikingoException() extends RuntimeException
 
@@ -91,6 +105,7 @@ case class Jinete(vikingo: Vikingo, dragon: Dragon) extends Participante {
   override val nivelHambre: Int = vikingo.nivelHambre
 
   override def aumentarHambre(porcentaje: Int): Vikingo = vikingo.copy(stats = vikingo.stats.aumentarHambre(porcentaje))
+
   override def participar(posta: Posta): Vikingo = this.aumentarHambre(5) // Todas las postas aumentan en 5 el hambre del jinete
 
 }

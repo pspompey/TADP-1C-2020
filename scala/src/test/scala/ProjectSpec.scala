@@ -31,7 +31,9 @@ class ProjectSpec extends FreeSpec with Matchers {
     }
     "Patapez" - {
       "No puede participar Posta si hambre > 50%" in {
+        val postaPesca: Pesca = Pesca(40)
 
+        postaPesca.puedeParticipar(Patapez) shouldBe false
       }
       "Doble de hambre luego de posta" in {
 
@@ -44,9 +46,7 @@ class ProjectSpec extends FreeSpec with Matchers {
     }
     "Astrid" - {
       "item hacha aumenta 30 puntos daño" in {
-        val astrid: Vikingo = Vikingo(Stats(60, 3, 5), Some(Hacha))
-        astrid.danio shouldBe 35
-
+        Astrid.danio shouldBe 35
       }
     }
     "Patan" - {
