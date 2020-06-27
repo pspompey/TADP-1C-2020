@@ -2,6 +2,7 @@ import Participante._
 import Dragon._
 import Postas._
 import Requerimiento._
+import Torneos._
 import org.scalatest.{FreeSpec, Matchers}
 
 class ProjectSpec extends FreeSpec with Matchers {
@@ -239,8 +240,8 @@ class ProjectSpec extends FreeSpec with Matchers {
         vikingo.mejorMontura(List(primoDeChimuelo,primoDeChimueloFlash ))(postaCarrera) shouldBe jineteFlash
 
       }
-      "Mejor Montura para combate entre dos dragones" in {
-        val vikingo: Vikingo = Vikingo(Stats(1, 150, 200))  // Daño vik 100
+      "Mejor Montura para combate entre dos dragones uno no lo puede montar" in {
+        val vikingo: Vikingo = Vikingo(Stats(1, 150, 200))  // Daño vik 200
         val primoDeChimuelo: FuriaNocturna = FuriaNocturna(20, 10) // Daño Drag 20
         val nadder: NadderMortifero = NadderMortifero(200) // Daño 150
 
@@ -253,7 +254,7 @@ class ProjectSpec extends FreeSpec with Matchers {
         vikingo.mejorMontura(List(primoDeChimuelo,nadder ))(postaCombate) shouldBe jinete
 
       }
-      "Mejor Montura para combate entre dos dragoness" in {
+      "Mejor Montura para combate entre dos dragones que puede montar" in {
         val vikingo: Vikingo = Vikingo(Stats(1, 150, 100))  // Daño vik 100
         val primoDeChimuelo: FuriaNocturna = FuriaNocturna(20, 10) // Daño Drag 20
         val nadder: NadderMortifero = NadderMortifero(200) // Daño 150
@@ -268,6 +269,25 @@ class ProjectSpec extends FreeSpec with Matchers {
 
       }
 
+      "Torneo estandar 2 participantes 1 prueba" in {
+        val vikingo: Vikingo = Vikingo(Stats(1, 150, 100))  // Daño vik 100
+        val vikingoNader: Vikingo = Vikingo(Stats(1, 100, 100))  // Daño vik 100
+        val primoDeChimuelo: FuriaNocturna = FuriaNocturna(20, 10) // Daño Drag 20
+        val nadder: NadderMortifero = NadderMortifero(200) // Daño 150
+
+
+        val jinete: Jinete = vikingo.intentarMontarDragon(primoDeChimuelo).get // daño 120
+        val jineteNadder: Jinete = vikingoNader.intentarMontarDragon(nadder).get // daño 250
+
+        val postaCombate: Combate = Combate(10)
+        val estandar: Estandar = Estandar()
+        val torneo: Torneo = Torneo(Estandar(),List(postaCombate),List(vikingoNader,vikingo),List(nadder,primoDeChimuelo))
+        torneo.seleccion(postaCombate) shouldBe List(jineteNadder,jinete)
+        torneo.ganador() shouldBe List(jineteNadder.participar(postaCombate))
+        //torneo.ganador() shouldBe Some(jineteNadder.participar(postaCombate))
+
+
+      }
       //Pesca: Puede existir requerimiento de peso minimo a levantar para el participante
       //Combate: Debe tener al menos X grado de barbaridad o arma equipada
       //Carrera: Puede requerir uso de montura
