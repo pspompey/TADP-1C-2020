@@ -64,6 +64,7 @@ case object Patapez extends Vikingo(Stats(80,1,5), Comestible){
   ???
 }
 */
+
 trait Item
 
 case object SistemaVuelo extends Item
@@ -73,7 +74,6 @@ case object Hacha extends Item
 case object Mazo extends Item
 
 case object Comestible extends Item
-
 
 case class NoAdmiteVikingoException() extends RuntimeException
 

@@ -48,8 +48,4 @@ case class Torneo(regla: Reglas ,postas: List[Posta] , vikingos: List[Vikingo], 
 
   }
 
-
-    //postas.flatMap(cada => unaPosta(cada))
-    // Some(postas.head(seleccion(postas.head)).head)
-
 }

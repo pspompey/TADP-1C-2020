@@ -289,7 +289,7 @@ class ProjectSpec extends FreeSpec with Matchers {
 
       }
       "Torneo estandar 4 participantes 2 prueba" in {
-        val vikingo: Vikingo = Vikingo(Stats(1, 150, 101))  // Daño vik 100
+        val vikingo: Vikingo = Vikingo(Stats(1, 150, 101))  // Daño vik 101
         val vikingo1: Vikingo = Vikingo(Stats(1, 149, 100))  // Daño vik 100
         val vikingoNader: Vikingo = Vikingo(Stats(1, 100, 101))  // Daño vik 101
         val vikingoNader1: Vikingo = Vikingo(Stats(1, 99, 100))  // Daño vik 100
@@ -314,7 +314,7 @@ class ProjectSpec extends FreeSpec with Matchers {
 
       }
       "Torneo estandar 4 participantes 3 prueba. En la ultima ni hace falta ver si puede pasar" in {
-        val vikingo: Vikingo = Vikingo(Stats(1, 150, 101))  // Daño vik 100
+        val vikingo: Vikingo = Vikingo(Stats(1, 150, 101))  // Daño vik 101
         val vikingo1: Vikingo = Vikingo(Stats(1, 149, 100))  // Daño vik 100
         val vikingoNader: Vikingo = Vikingo(Stats(1, 100, 101))  // Daño vik 101
         val vikingoNader1: Vikingo = Vikingo(Stats(1, 99, 100))  // Daño vik 100
@@ -334,6 +334,84 @@ class ProjectSpec extends FreeSpec with Matchers {
         val torneo: Torneo = Torneo(Estandar(),List(postaCombate, postaCombate,postaCombate),List(vikingoNader, vikingoNader1,vikingo, vikingo1),List(nadder,primoDeChimuelo, nadder1,primoDeChimuelo1))
 
         torneo.ganador() shouldBe Some(jineteNadder.participar(postaCombate).aumentarHambre(5))
+
+
+
+      }
+      "Torneo Eliminacion 3, 4 participantes 2 prueba. En la ultima ni hace falta ver si puede pasar" in {
+        val vikingo: Vikingo = Vikingo(Stats(1, 150, 101))  // Daño vik 101
+        val vikingo1: Vikingo = Vikingo(Stats(1, 149, 100))  // Daño vik 100
+        val vikingoNader: Vikingo = Vikingo(Stats(1, 100, 101))  // Daño vik 101
+        val vikingoNader1: Vikingo = Vikingo(Stats(1, 99, 100))  // Daño vik 100
+        val primoDeChimuelo: FuriaNocturna = FuriaNocturna(20, 10) // Daño Drag 20
+        val primoDeChimuelo1: FuriaNocturna = FuriaNocturna(19, 10) // Daño Drag 19
+        val nadder: NadderMortifero = NadderMortifero(200) // Daño 150
+        val nadder1: NadderMortifero = NadderMortifero(199) // Daño 150
+
+
+        val jinete: Jinete = vikingo.intentarMontarDragon(primoDeChimuelo).get // daño 121
+        val jinete1: Jinete = vikingo1.intentarMontarDragon(primoDeChimuelo1).get // daño 120
+        val jineteNadder: Jinete = vikingoNader.intentarMontarDragon(nadder).get // daño 251
+        val jineteNadder1: Jinete = vikingoNader1.intentarMontarDragon(nadder1).get // daño 250
+
+        val postaCombate: Combate = Combate(10)
+
+        val torneo: Torneo = Torneo(Eliminacion(3),List(postaCombate,postaCombate),List(vikingoNader, vikingoNader1,vikingo, vikingo1),List(nadder,primoDeChimuelo, nadder1,primoDeChimuelo1))
+
+        torneo.ganador() shouldBe Some(jineteNadder.participar(postaCombate))
+
+
+
+      }
+      "Torneo Inverso, 4 participantes 2 prueba." in {
+        val vikingo: Vikingo = Vikingo(Stats(1, 150, 101))  // Daño vik 101
+        val vikingo1: Vikingo = Vikingo(Stats(1, 149, 100))  // Daño vik 100
+        val vikingoNader: Vikingo = Vikingo(Stats(1, 100, 101))  // Daño vik 101
+        val vikingoNader1: Vikingo = Vikingo(Stats(1, 99, 100))  // Daño vik 100
+        val primoDeChimuelo: FuriaNocturna = FuriaNocturna(20, 10) // Daño Drag 20
+        val primoDeChimuelo1: FuriaNocturna = FuriaNocturna(19, 10) // Daño Drag 19
+        val nadder: NadderMortifero = NadderMortifero(200) // Daño 150
+        val nadder1: NadderMortifero = NadderMortifero(199) // Daño 150
+
+
+        val jinete: Jinete = vikingo.intentarMontarDragon(primoDeChimuelo).get // daño 121
+        val jinete1: Jinete = vikingo1.intentarMontarDragon(primoDeChimuelo1).get // daño 120
+        val jineteNadder: Jinete = vikingoNader.intentarMontarDragon(nadder).get // daño 251
+        val jineteNadder1: Jinete = vikingoNader1.intentarMontarDragon(nadder1).get // daño 250
+
+        val postaCombate: Combate = Combate(10)
+
+        val torneo: Torneo = Torneo(Inverso(),List(postaCombate, postaCombate,postaCombate),List(vikingoNader, vikingoNader1,vikingo, vikingo1),List(nadder,primoDeChimuelo, nadder1,primoDeChimuelo1))
+
+        torneo.ganador() shouldBe Some(jinete1.participar(postaCombate).aumentarHambre(5))
+
+
+
+      }
+      "Torneo Handicap, 4 participantes 2 prueba." in {
+        val vikingo: Vikingo = Vikingo(Stats(1, 150, 101))  // Daño vik 101
+        val vikingo1: Vikingo = Vikingo(Stats(1, 149, 100))  // Daño vik 100
+        val vikingo2: Vikingo = Vikingo(Stats(1, 148, 99))  // Daño vik 99
+        val vikingoNader: Vikingo = Vikingo(Stats(1, 100, 101))  // Daño vik 101
+        val primoDeChimuelo: FuriaNocturna = FuriaNocturna(20, 10) // Daño Drag 20
+        val primoDeChimuelo1: FuriaNocturna = FuriaNocturna(19, 10) // Daño Drag 19
+        val primoDeChimuelo2: FuriaNocturna = FuriaNocturna(18, 10) // Daño Drag 18
+        val nadder: NadderMortifero = NadderMortifero(200) // Daño 150
+
+
+/*
+        val jinete: Jinete = vikingo.intentarMontarDragon(primoDeChimuelo).get // daño 121
+        val jinete1: Jinete = vikingo1.intentarMontarDragon(primoDeChimuelo1).get // daño 120
+        val jineteNadder: Jinete = vikingoNader.intentarMontarDragon(nadder).get // daño 251
+        val jinete2: Jinete = vikingo2.intentarMontarDragon(primoDeChimuelo2).get // daño 117
+*/      // Primera ROnda pasan vikingoNadder y vikingo. Vikingo elige primero al nader y gana
+
+        val postaCombate: Combate = Combate(10)
+        val vikingoGanador: Vikingo = vikingo.intentarMontarDragon(nadder).get.participar(postaCombate).aumentarHambre(5)
+
+        val torneo: Torneo = Torneo(Handicap(),List(postaCombate, postaCombate,postaCombate),List(vikingoNader, vikingo,vikingo1, vikingo2),List(nadder,primoDeChimuelo, primoDeChimuelo2,primoDeChimuelo1))
+
+        torneo.ganador() shouldBe Some(vikingoGanador)
 
 
 
