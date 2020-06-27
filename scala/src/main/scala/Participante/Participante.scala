@@ -52,7 +52,11 @@ case class Vikingo(stats: Stats, item: Option[Item] = None) extends Participante
     posta(List(this,otroVikingo)).head == this.participar(posta)
   }
 
-  def mejorMontura(dragones: List[Dragon])(posta: Posta): Participante = posta.rankear(dragones.map(d => intentarMontarDragon(d).getOrElse(this))).head
+  def mejorMontura(dragones: List[Dragon])(posta: Posta): Participante = if (!dragones.isEmpty) {
+    posta.rankear(dragones.map(d => intentarMontarDragon(d).getOrElse(this))).head
+  } else {
+    this
+  }
 
 }
 

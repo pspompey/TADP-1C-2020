@@ -16,7 +16,7 @@ case class Torneo(regla: Reglas ,postas: List[Posta] , vikingos: List[Vikingo], 
        val participante: Participante = cadaV.mejorMontura(dragonesRestantes)(posta)
        participante match {
          case p: Jinete => dragonesRestantes = dragonesRestantes.filter(cada => cada != p.dragon)
-         // case _ => participante
+         case _ => participante
        }
        participante
      })
