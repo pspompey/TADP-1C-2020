@@ -19,6 +19,14 @@ case class Tournament(competitions: List[Competition], dragons: List[Dragon], ru
 case class TournamentTeams(competitions: List[Competition], dragons: List[Dragon]) extends (List[List[Viking]] => Option[List[Viking]]){
 
   def apply(teams: List[List[Viking]]): Option[List[Viking]] = {
+    val result = competitionResult(teams)
+    if(!result.isEmpty)
+      Some(teams(result.get.head.team))
+    else
+      None
+  }
+
+  def competitionResult(teams: List[List[Viking]]): Option[List[Viking]] = {
     competitions.foldLeft(defineTeam(teams))((competitors, competition) => {
       val regroup = competitors.flatten.groupBy(_.team).map(_._2)
       if (regroup.filter(_.length > 0).size > 1)
