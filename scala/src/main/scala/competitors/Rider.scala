@@ -21,6 +21,8 @@ case class Rider(viking: Viking, dragon: Dragon) extends
     this
   }
 
+  def NotBeHungry(competition: Competition): Boolean = this.compete(competition).hunger < 100
+
   def hasItem(item: Item): Boolean = this.viking.hasItem(item)
 
 }

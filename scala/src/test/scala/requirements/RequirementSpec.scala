@@ -99,8 +99,8 @@ class RequirementSpec extends FreeSpec with Matchers {
     }
 
     "when it requires an edible" - {
-      val requirement = ItemRequirement(Edible())
-      val vikingWithItem = new Viking(stats = Stat(damage = 50,weight = 60,speed = 10),item = Some(Edible()))
+      val requirement = ItemRequirement(Edible(10))
+      val vikingWithItem = new Viking(stats = Stat(damage = 50,weight = 60,speed = 10),item = Some(Edible(10)))
       val vikingWithoutItem = new Viking(stats = Stat(damage = 10,weight = 40,speed = 10),item = Some(Weapon(0)))
 
       "should return true if the viking has it" in {

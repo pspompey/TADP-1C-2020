@@ -28,5 +28,5 @@ case class MinWeightLiftRequirement(weight: Double)  extends Requirement{
   override def apply(competitor: Competitor): Boolean = weight <= competitor.weight
 }
 case class NotBeHungry(competition: Competition)  extends Requirement{
-  override def apply(competitor: Competitor): Boolean = competitor.compete(competition).hunger < 100
+  override def apply(competitor: Competitor): Boolean = competitor.NotBeHungry(competition)
 }
