@@ -31,7 +31,7 @@ class TournamentTeamSpec extends FreeSpec with Matchers{
 
     "when it is called with a list of teams" - {
       "should return the list of vikings they won" in {
-        assertResult(Some(team(1)))(tournament(team))
+        assertResult(Some(team(0)))(tournament(team))
       }
     }
 

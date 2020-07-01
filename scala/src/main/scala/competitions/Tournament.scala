@@ -21,23 +21,20 @@ case class TournamentTeams(competitions: List[Competition], dragons: List[Dragon
   def apply(teams: List[List[Viking]]): Option[List[Viking]] = {
     val result = competitionResult(teams)
     if(!result.isEmpty)
-      Some(teams(result.get.head.team))
+      Some(teams(result.head.team))
     else
       None
   }
 
-  def competitionResult(teams: List[List[Viking]]): Option[List[Viking]] = {
-    competitions.foldLeft(defineTeam(teams))((competitors, competition) => {
-      val regroup = competitors.flatten.groupBy(_.team).map(_._2)
-      if (regroup.filter(_.length > 0).size > 1)
-        teamCompete(competitors.flatten, competition)
-      else
-        return regroup.find(_.length > 0).headOption
+  def competitionResult(teams: List[List[Viking]]): Option[Viking] = {
+    competitions.foldLeft(defineTeam(teams).flatten)((competitors, competition) => {
+      val regroup = competitors.groupBy(_.team).map(_._2)
+      regroup.filter(_.length > 0).size match {
+        case 0 => return None
+        case 1 => return regroup.find(_.length > 0).head.headOption
+        case _ => Standard(competition, dragons, competitors)
+      }
     }).headOption
-  }
-
-  def teamCompete(competitors: List[Viking], competition: Competition): List[List[Viking]] = {
-    Standard(competition, dragons, competitors).groupBy(_.team).map(_._2).toList
   }
 
   def defineTeam(teams: List[List[Viking]]): List[List[Viking]] = teams.map(list => list.map(_.joinTeam(teams.indexOf(list))))
