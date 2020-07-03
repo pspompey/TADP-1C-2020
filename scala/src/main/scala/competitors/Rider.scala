@@ -25,5 +25,6 @@ case class Rider(viking: Viking, dragon: Dragon) extends
 
   def hasItem(item: ItemType): Boolean = this.viking.hasItem(item)
 
+  override def hasMount(): Boolean = true
 }
 
