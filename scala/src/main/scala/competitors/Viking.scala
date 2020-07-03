@@ -69,8 +69,9 @@ object Patan extends Viking(Stat(damage = 50,weight = 60,speed = 10), Some(Weapo
 object Patapez extends Viking(Stat(damage = 50,weight = 60,speed = 10), Some(Edible(10))){
 
   override def compete(competition: Competition): Viking = {
-    this.hunger += competition.basicEfect * 2 - item.get.energy
-    this
+    val viking = this.copy()
+    viking.hunger += competition.basicEfect * 2 - item.get.energy
+    viking
   }
 
   override def NotBeHungry(competition: Competition): Boolean =
