@@ -2,8 +2,7 @@ package competitors
 
 import competitions.Competition
 import dragons.Dragon
-import items.{Edible, FlySystem, Item, Weapon}
-import requirements._
+import items._
 
 abstract class Competitor(val stats: Stat){
 
@@ -26,7 +25,7 @@ case class Viking(override val stats: Stat, var hunger: Double, item: Option[Ite
   def capacity: Double = stats.weight * 0.5 + stats.damage * 2
   override def damage: Int = super.damage + item.map(_.damage).getOrElse(0)
 
-  def hasItem(item: Item): Boolean = item.itemType.equals(this.item.map(i => i.itemType).getOrElse(None))
+  def hasItem(item: ItemType): Boolean = item.equals(this.item.map(i => i.itemType).getOrElse(None))
 
   def setHunger(hunger: Double): Viking = {
     this.hunger = hunger
