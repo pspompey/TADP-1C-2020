@@ -31,6 +31,6 @@ case class NotBeHungry(competition: Competition)  extends Requirement{
   override def apply(competitor: Competitor): Boolean = competitor.NotBeHungry(competition)
 }
 
-case class MountRequirement(competitor: Competitor) extends Requirement{
+case object MountRequirement extends Requirement{
   override def apply(competitor: Competitor) : Boolean = competitor.hasMount()
 }
