@@ -1,24 +1,34 @@
 package competitions
 
-import competitors.{Stat, Viking}
+import competitors.{Astrid, Patan, Patapez, Stat, Viking}
+import items.WeaponType
 import org.scalatest.{FreeSpec, Matchers}
-import requirements.Requirement
+import requirements.{ItemRequirement, Requirement}
 
 class FightSpec extends FreeSpec with Matchers{
 
   "A Fight" -  {
 
-    val viking1 = new Viking(stats = Stat(damage = 50,weight = 60,speed = 10))
-    val viking2 = new Viking(stats = Stat(damage = 30,weight = 70,speed = 10))
-    val viking3 = new Viking(stats = Stat(damage = 40,weight = 40,speed = 10))
-    val vikings = List(viking3,viking2,viking1)
+    val vikings = List(Patapez,Patan,Astrid)
     val competition = new Fight()
 
     "when it is called with a list of vikings" - {
-      "should return the vikings ordered by their damage" in {
-        val result = competition(vikings)
-        val ordering = List(viking1.compete(competition),viking3.compete(competition),viking2.compete(competition))
+      val result = competition(vikings)
 
+      "should return the vikings ordered by their damage" in {
+        val ordering = List(Patan.compete(competition),Astrid.compete(competition),Patapez.compete(competition))
+        assertResult(ordering)(result)
+      }
+    }
+
+    "when it requires a weapon" - {
+      val requirement = ItemRequirement(WeaponType)
+      val competition = Fight(List(requirement))
+
+      val result = competition(vikings)
+
+      "should return the vikings who has weapons ordered by their damage" in {
+        val ordering = List(Patan.compete(competition),Astrid.compete(competition))
         assertResult(ordering)(result)
       }
     }

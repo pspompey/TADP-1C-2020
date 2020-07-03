@@ -1,26 +1,43 @@
 package competitions
 
-import competitors.{Stat, Viking}
+import competitors.{Astrid, Hipo, Patan, Patapez, Stat, Viking}
+import dragons.{DeadlyNadder, Gronckle}
 import org.scalatest.{FreeSpec, Matchers}
+import requirements.{MinCapacityRequirement, MountRequirement}
 
 class FishingSpec extends FreeSpec with Matchers{
 
   "A Fishing" -  {
 
-    val viking1 = Viking(stats = Stat(damage = 50,weight = 60,speed = 10), hunger = 100, item = None) // capacity = 130
-    val viking2 = new Viking(stats = Stat(damage = 30,weight = 70,speed = 10)) // capacity = 95
-    val viking3 = new Viking(stats = Stat(damage = 40,weight = 40,speed = 10)) // capacity = 100
-    val vikings = List(viking3,viking2,viking1)
+    val dragon = new Gronckle(400,40)
+    val dragon2 = new Gronckle(400,40)
+    val competitor = List(Hipo,Patapez,Patan.ride(dragon).get,Astrid)
     val competition = new Fishing()
 
-    "when it is called with a list of vikings" - {
+    "when it is called with a list of competitors" - {
+      val result = competition(competitor)
+
       "should return the vikings ordered by their capacity" in {
-        val result = competition(vikings)
-        val ordering = List(viking3.compete(competition),viking2.compete(competition))
+        val ordering = List(Patapez.compete(competition)
+          ,Hipo.compete(competition)
+          ,Astrid.compete(competition)
+          ,Patan.ride(dragon2).map(r => r.compete(competition)).getOrElse(None))
 
         assertResult(ordering)(result)
       }
     }
 
+    "when it requires a minimun capacity" - {
+      val competitors = List(Hipo,Patapez,Patan,Astrid)
+      val requirement = MinCapacityRequirement(120)
+      val competition = Fishing(List(requirement))
+
+      val result = competition(competitors)
+
+      "should return the vikings who overcomes the minimun capacity ordered by their capacity" in {
+        val ordering = List(Patapez.compete(competition),Patan.compete(competition))
+        assertResult(ordering)(result)
+      }
+    }
   }
 }
