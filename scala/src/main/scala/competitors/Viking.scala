@@ -26,7 +26,7 @@ case class Viking(override val stats: Stat, var hunger: Double, item: Option[Ite
   def capacity: Double = stats.weight * 0.5 + stats.damage * 2
   override def damage: Int = super.damage + item.map(_.damage).getOrElse(0)
 
-  def hasItem(item: Item): Boolean = item.getClass.equals(this.item.getOrElse(None).getClass)
+  def hasItem(item: Item): Boolean = item.itemType.equals(this.item.map(i => i.itemType).getOrElse(None))
 
   def setHunger(hunger: Double): Viking = {
     this.hunger = hunger
