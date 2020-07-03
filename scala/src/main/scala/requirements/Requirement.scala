@@ -2,7 +2,7 @@ package requirements
 
 import competitions.Competition
 import competitors.Competitor
-import items.Item
+import items.{Item, ItemType}
 
 trait Requirement extends (Competitor => Boolean)
 
@@ -21,7 +21,7 @@ case class MinDamageRequirement(damage: Int) extends Requirement{
 case class MaxDamageRequirement(damage: Int) extends Requirement{
   override def apply(competitor: Competitor): Boolean = damage >= competitor.damage
 }
-case class ItemRequirement(item: Item) extends Requirement{
+case class ItemRequirement(item: ItemType) extends Requirement{
   override def apply(competitor: Competitor): Boolean = competitor.hasItem(item)
 }
 case class MinWeightLiftRequirement(weight: Double)  extends Requirement{

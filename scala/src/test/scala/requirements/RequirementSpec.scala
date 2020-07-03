@@ -1,7 +1,7 @@
 package requirements
 
 import competitors.{Stat, Viking}
-import items.{Edible, FlySystem, Weapon}
+import items.{Edible, EdibleType, FlySystem, FlySystemType, Weapon, WeaponType}
 import org.scalatest.{FreeSpec, Matchers}
 
 class RequirementSpec extends FreeSpec with Matchers {
@@ -73,7 +73,7 @@ class RequirementSpec extends FreeSpec with Matchers {
 
   "An ItemRequirement" -  {
     "when it requires an item" - {
-      val requirement = ItemRequirement(FlySystem)
+      val requirement = ItemRequirement(FlySystemType)
       val vikingWithItem = new Viking(stats = Stat(damage = 50,weight = 60,speed = 10),item = Some(FlySystem))
       val vikingWithoutItem = new Viking(stats = Stat(damage = 10,weight = 40,speed = 10))
 
@@ -86,7 +86,7 @@ class RequirementSpec extends FreeSpec with Matchers {
     }
 
     "when it requires an weapon" - {
-      val requirement = ItemRequirement(Weapon(10))
+      val requirement = ItemRequirement(WeaponType)
       val vikingWithItem = new Viking(stats = Stat(damage = 50,weight = 60,speed = 10),item = Some(Weapon(20)))
       val vikingWithoutItem = new Viking(stats = Stat(damage = 10,weight = 40,speed = 10),item = Some(FlySystem))
 
@@ -99,7 +99,7 @@ class RequirementSpec extends FreeSpec with Matchers {
     }
 
     "when it requires an edible" - {
-      val requirement = ItemRequirement(Edible(10))
+      val requirement = ItemRequirement(EdibleType)
       val vikingWithItem = new Viking(stats = Stat(damage = 50,weight = 60,speed = 10),item = Some(Edible(10)))
       val vikingWithoutItem = new Viking(stats = Stat(damage = 10,weight = 40,speed = 10),item = Some(Weapon(0)))
 
