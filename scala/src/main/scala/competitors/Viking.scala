@@ -61,9 +61,9 @@ case class Viking(override val stats: Stat, var hunger: Double, item: Option[Ite
   }
 }
 
-object Hipo extends Viking(Stat(damage = 50,weight = 60,speed = 10), Some(FlySystem))
-object Astrid extends Viking(Stat(damage = 50,weight = 60,speed = 10), Some(Weapon(30)))
-object Patan extends Viking(Stat(damage = 50,weight = 60,speed = 10), Some(Weapon(100)))
+object Hipo extends Viking(Stat(damage = 50,weight = 30,speed = 30), Some(FlySystem))
+object Astrid extends Viking(Stat(damage = 50,weight = 20,speed = 20), Some(Weapon(30)))
+object Patan extends Viking(Stat(damage = 50,weight = 40,speed = 15), Some(Weapon(100)))
 
 object Patapez extends Viking(Stat(damage = 50,weight = 60,speed = 10), Some(Edible(10))){
 
