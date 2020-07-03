@@ -2,7 +2,7 @@ package competitors
 
 import competitions.Competition
 import dragons.Dragon
-import items.Item
+import items.{Item, ItemType}
 import requirements.Requirement
 
 case class Rider(viking: Viking, dragon: Dragon) extends
@@ -23,7 +23,7 @@ case class Rider(viking: Viking, dragon: Dragon) extends
 
   def NotBeHungry(competition: Competition): Boolean = this.compete(competition).hunger < 100
 
-  def hasItem(item: Item): Boolean = this.viking.hasItem(item)
+  def hasItem(item: ItemType): Boolean = this.viking.hasItem(item)
 
 }
 

@@ -11,7 +11,7 @@ abstract class Competitor(val stats: Stat){
   def damage: Int = stats.damage
 
   def capacity: Double
-  def hasItem(item: Item): Boolean
+  def hasItem(item: ItemType): Boolean
   def compete(competition: Competition): Viking
   def setHunger(hunger: Double): Competitor
   def NotBeHungry(competition: Competition): Boolean
