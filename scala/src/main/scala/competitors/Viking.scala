@@ -12,12 +12,12 @@ abstract class Competitor(val stats: Stat){
   def weight: Double = stats.weight
   def damage: Int = stats.damage
 
-  abstract def hasMount(): Boolean
-  abstract def capacity: Double
-  abstract def hasItem(item: ItemType): Boolean
-  abstract def compete(competition: Competition): Viking
-  abstract def setHunger(hunger: Double): Competitor
-  abstract def NotBeHungry(competition: Competition): Boolean
+  def hasMount(): Boolean
+  def capacity: Double
+  def hasItem(item: ItemType): Boolean
+  def compete(competition: Competition): Viking
+  def setHunger(hunger: Double): Competitor
+  def NotBeHungry(competition: Competition): Boolean
 }
 
 case class Viking(override val stats: Stat, var hunger: Double, item: Option[Item], var team: Int = -1) extends Competitor(stats){
@@ -63,7 +63,7 @@ case class Viking(override val stats: Stat, var hunger: Double, item: Option[Ite
     competition.simulate(this :: dragons.flatMap(ride)).headOption
   }
 
-  override def hasMount(): Boolean = false
+  def hasMount(): Boolean = false
 }
 
 object Hipo extends Viking(Stat(damage = 50,weight = 30,speed = 30), Some(FlySystem))
