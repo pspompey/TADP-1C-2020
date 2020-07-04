@@ -6,7 +6,7 @@ import items.{Item, ItemType}
 import requirements.Requirement
 
 case class Rider(viking: Viking, dragon: Dragon) extends
-  Competitor(stats = Stat(damage = viking.damage + dragon.damage, weight = dragon.weight + viking.weight, speed = dragon.speed - viking.weight.toInt)){
+  Competitor(stats = Stat(damage = viking.damage + dragon.damage, weight = dragon.weight + viking.weight, speed = dragon.speed)){
 
   def capacity: Double = dragon.capacity - viking.weight
 
