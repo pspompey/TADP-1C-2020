@@ -20,7 +20,7 @@ abstract class Competitor(val stats: Stat){
   def NotBeHungry(competition: Competition): Boolean
 }
 
-case class Viking(override val stats: Stat, var hunger: Double, item: Option[Item], var team: Int = -1) extends Competitor(stats){
+case class Viking(override val stats: Stat, var hunger: Double = 0, item: Option[Item], var team: Int = -1) extends Competitor(stats){
 
   def this(stats: Stat,item: Option[Item]) = this(stats,0.0,item)
   def this(stats: Stat) = this(stats,0.0,None)
@@ -31,8 +31,9 @@ case class Viking(override val stats: Stat, var hunger: Double, item: Option[Ite
   def hasItem(item: ItemType): Boolean = item.equals(this.item.map(i => i.itemType).getOrElse(None))
 
   def setHunger(hunger: Double): Viking = {
-    this.hunger = hunger
-    this
+    val viking = this.copy()
+    viking.hunger = hunger
+    viking
   }
 
   def joinTeam(team: Int): Viking = {
