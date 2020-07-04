@@ -14,7 +14,7 @@ trait Dragon {
 
   def damage: Int = stats.damage
   def weight: Double = stats.weight
-  def speed: Int = stats.speed
+  def speed: Int = stats.speed - stats.weight.toInt
 
   def canRide(viking: Viking): Boolean = available && requirements.forall(r => r(viking))
 
