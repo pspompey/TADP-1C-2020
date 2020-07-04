@@ -28,6 +28,13 @@ class TournamentSpec extends FreeSpec with Matchers {
         assertResult(tournament(vikings))(Some(viking3.setHunger(5)))
       }
     }
+    "when it is called with a list of vikings with Standard rules, 2 competitions" - {
+      val comp = List(Fishing(List[Requirement](MinCapacityRequirement(0))),Fishing(List[Requirement](MinCapacityRequirement(0))))
+      val tournament = Tournament(comp, dragons, Standard)
+      "should return the vikings ordered by their capacity" in {
+        assertResult(tournament(vikings))(Some(viking3.setHunger(10)))
+      }
+    }
 
     "when it is called with a list of vikings with Elimination rules" - {
       val tournament = Tournament(competitions, dragons, Elimination(3))

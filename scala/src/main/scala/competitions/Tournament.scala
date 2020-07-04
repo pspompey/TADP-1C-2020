@@ -7,9 +7,10 @@ case class Tournament(competitions: List[Competition], dragons: List[Dragon], ru
 
   def apply(vikings: List[Viking]): Option[Viking] = {
     competitions.foldLeft(vikings)((competitors, competition) => {
-      if (competitors.length > 1)
+      if (competitors.length > 1) {
+        dragons.foreach(cada => cada.available = true)
         rule(competition, dragons, competitors)
-      else
+      } else
         return competitors.headOption
     }).headOption
   }
