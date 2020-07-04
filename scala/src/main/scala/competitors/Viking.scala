@@ -74,11 +74,14 @@ object Patapez extends Viking(Stat(damage = 50,weight = 60,speed = 10), Some(Edi
 
   override def compete(competition: Competition): Viking = {
     val viking = this.copy()
-    viking.hunger += competition.basicEfect * 2 - item.get.energy
+    if (item.get.energy > viking.hunger + competition.basicEfect * 2){
+      viking.hunger = 0.0
+    }
+    else {
+      viking.hunger += competition.basicEfect * 2 - item.get.energy
+    }
     viking
   }
 
-  override def NotBeHungry(competition: Competition): Boolean =
-    this.copy().compete(competition).hunger < 50
-
+  override def NotBeHungry(competition: Competition): Boolean = this.compete(competition).hunger < 50
 }
