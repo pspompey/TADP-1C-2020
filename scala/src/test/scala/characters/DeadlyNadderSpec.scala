@@ -13,7 +13,7 @@ class DeadlyNadderSpec extends FreeSpec with Matchers{
 
       "should have 150 damage, 20 speed, 40 weight and 8 capacity" in {
         assert(deadlyNadder.damage == 150)
-        assert(deadlyNadder.speed == 60)
+        assert(deadlyNadder.speed == 20)
         assert(deadlyNadder.weight == 40)
         assert(deadlyNadder.capacity == 8)
       }
